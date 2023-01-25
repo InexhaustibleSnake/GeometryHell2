@@ -4,14 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Projectiles/BaseProjectile.h"
-#include "BlasterProjectile.generated.h"
-
+#include "EnemyProjectile.generated.h"
 
 UCLASS()
-class GEOMETRYHELL2_API ABlasterProjectile : public ABaseProjectile
+class GEOMETRYHELL2_API AEnemyProjectile : public ABaseProjectile
 {
 	GENERATED_BODY()
-
+	
 public:
-	ABlasterProjectile();
+
+	AEnemyProjectile();
 };

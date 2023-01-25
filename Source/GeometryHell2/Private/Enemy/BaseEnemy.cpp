@@ -48,7 +48,7 @@ void ABaseEnemy::OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageT
 
 	HealthRenderComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
 	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), DamagedSound, GetActorLocation());
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), OnDamagedParticles, GetActorLocation(), GetActorRotation());
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), OnDamagedParticles, CannonMesh->GetComponentLocation(), GetActorRotation());
 }
 
 void ABaseEnemy::Destroyed()
