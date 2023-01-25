@@ -4,6 +4,7 @@
 #include "Components/TextRenderComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
+#include "NiagaraFunctionLibrary.h"
 
 ABaseEnemy::ABaseEnemy()
 {
@@ -30,7 +31,6 @@ void ABaseEnemy::BeginPlay()
 	OnTakeAnyDamage.AddDynamic(this, &ABaseEnemy::OnTakeDamage);
 }
 
-
 void ABaseEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -48,6 +48,7 @@ void ABaseEnemy::OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageT
 
 	HealthRenderComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
 	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), DamagedSound, GetActorLocation());
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), OnDamagedParticles, GetActorLocation(), GetActorRotation());
 }
 
 void ABaseEnemy::Destroyed()

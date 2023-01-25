@@ -9,6 +9,7 @@
 class UTextRenderComponent;
 class UParticleSystem;
 class USoundCue;
+class UNiagaraSystem;
 
 UCLASS()
 class GEOMETRYHELL2_API ABaseEnemy : public ACharacter
@@ -45,6 +46,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
 		USoundCue* DeathSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Particles")
+		UNiagaraSystem* OnDamagedParticles;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Particles")
 		UParticleSystem* OnDestroyedParticles;
