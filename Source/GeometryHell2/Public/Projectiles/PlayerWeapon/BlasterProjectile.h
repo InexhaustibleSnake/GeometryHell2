@@ -11,5 +11,7 @@ UCLASS()
 class GEOMETRYHELL2_API ABlasterProjectile : public ABaseProjectile
 {
 	GENERATED_BODY()
-	
+
+public:
+	ABlasterProjectile();
 };

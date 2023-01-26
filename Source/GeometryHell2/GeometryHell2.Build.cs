@@ -8,7 +8,7 @@ public class GeometryHell2 : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "Niagara" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "Niagara", "NavigationSystem", "GameplayTasks" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

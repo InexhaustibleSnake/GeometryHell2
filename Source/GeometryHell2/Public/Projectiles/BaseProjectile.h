@@ -34,6 +34,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Properities")
 		float LifeSpan = 5.0f;
 
+	FName TagToIgnore;
+
 	float BaseDamage = 10.0f;
 	FVector ShotDirection;
 

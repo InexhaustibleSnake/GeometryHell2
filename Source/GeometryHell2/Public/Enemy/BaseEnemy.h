@@ -10,6 +10,10 @@ class UTextRenderComponent;
 class UParticleSystem;
 class USoundCue;
 class UNiagaraSystem;
+class UBehaviorTree;
+class ABaseProjectile;
+
+DECLARE_MULTICAST_DELEGATE(FOnDeath);
 
 UCLASS()
 class GEOMETRYHELL2_API ABaseEnemy : public ACharacter
@@ -19,12 +23,20 @@ class GEOMETRYHELL2_API ABaseEnemy : public ACharacter
 public:
 	ABaseEnemy();
 	virtual void Tick(float DeltaTime) override;
+	void ShootStart();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
+		UBehaviorTree* BehaviorTreeAsset;
+
+	FOnDeath OnDeath;
 
 protected:
 	virtual void BeginPlay() override;
 	UFUNCTION()
 	virtual void OnTakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 	virtual void Destroyed() override;
+
+	void ShootProjectile();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 		UStaticMeshComponent* CannonMesh;
@@ -41,6 +53,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health")
 		float Health;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health")
+		float FireRate = 1.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Projectile")
+		TSubclassOf<ABaseProjectile> MainProjectile;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
+		USoundCue* ShootSound;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
 		USoundCue* DamagedSound;
 
@@ -52,4 +73,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Particles")
 		UParticleSystem* OnDestroyedParticles;
+
+	FTimerHandle ShootTimer;
 };
