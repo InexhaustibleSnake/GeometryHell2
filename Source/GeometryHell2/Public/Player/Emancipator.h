@@ -9,6 +9,8 @@
 class USkeletalMeshComponent;
 class UCameraComponent;
 class UWeaponComponent;
+class UHealthComponent;
+class UAbilityComponent;
 
 UCLASS()
 class GEOMETRYHELL2_API AEmancipator : public ACharacter
@@ -28,6 +30,12 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
         UWeaponComponent* WeaponComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+		UHealthComponent* HealthComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+		UAbilityComponent* AbilityComponent;
 
 private:
 

@@ -4,6 +4,8 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Player/Components/WeaponComponent.h"
+#include "Player/Components/HealthComponent.h"
+#include "Player/Components/AbilityComponent.h"
 
 AEmancipator::AEmancipator()
 {
@@ -15,6 +17,8 @@ AEmancipator::AEmancipator()
 	GetMesh()->SetupAttachment(MainCamera);
 
 	WeaponComponent = CreateDefaultSubobject<UWeaponComponent>("UWeaponComponent");
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>("HealthComponent");
+	AbilityComponent = CreateDefaultSubobject<UAbilityComponent>("AbilityComponent");
 }
 
 void AEmancipator::BeginPlay()
@@ -44,6 +48,12 @@ void AEmancipator::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction("NextWeapon", IE_Pressed, WeaponComponent, &UWeaponComponent::NextWeapon);
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, WeaponComponent, &UWeaponComponent::StartFire);
 	PlayerInputComponent->BindAction("Fire", IE_Released, WeaponComponent, &UWeaponComponent::StopFire);
+
+	DECLARE_DELEGATE_OneParam(FAbilityComponentSignature, bool);
+	PlayerInputComponent->BindAction<FAbilityComponentSignature>("SlowTime", IE_Pressed, AbilityComponent, &UAbilityComponent::TimeManager, false);
+	PlayerInputComponent->BindAction<FAbilityComponentSignature>("StopTime", IE_Pressed, AbilityComponent, &UAbilityComponent::TimeManager, true);
+	PlayerInputComponent->BindAction("SlowTime", IE_Released, AbilityComponent, &UAbilityComponent::RestoreTime);
+	PlayerInputComponent->BindAction("StopTime", IE_Released, AbilityComponent, &UAbilityComponent::RestoreTime);
 }
 
 void AEmancipator::MoveForward(float Amount)

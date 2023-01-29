@@ -35,12 +35,6 @@ void ABaseEnemy::BeginPlay()
 	OnTakeAnyDamage.AddDynamic(this, &ABaseEnemy::OnTakeDamage);
 }
 
-void ABaseEnemy::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
 void ABaseEnemy::OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
 	Health = FMath::Clamp(Health - Damage, 0.0f, MaxHealth);
@@ -57,10 +51,9 @@ void ABaseEnemy::OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageT
 
 void ABaseEnemy::Destroyed()
 {
-	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), OnDestroyedParticles, GetActorTransform(), true, EPSCPoolMethod::AutoRelease);
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), OnDestroyedParticles, CannonMesh->GetComponentLocation(), GetActorRotation());
 	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), DeathSound, GetActorLocation());
 	OnDeath.Broadcast();
-	//GetController()->Destroy();
 	Destroy();
 }
 
@@ -79,7 +72,7 @@ void ABaseEnemy::ShootProjectile()
 	{
 		UGameplayStatics::SpawnSoundAtLocation(GetWorld(), ShootSound, GetActorLocation());
 		Projectile->SetShotDirection(CannonMesh->GetForwardVector());
-		Projectile->SetOwner(GetOwner());
+		Projectile->SetOwner(this);
 		Projectile->FinishSpawning(SpawnTransform);
 	}
 }

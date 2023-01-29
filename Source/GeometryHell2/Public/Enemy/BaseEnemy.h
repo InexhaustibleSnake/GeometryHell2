@@ -22,7 +22,6 @@ class GEOMETRYHELL2_API ABaseEnemy : public ACharacter
 
 public:
 	ABaseEnemy();
-	virtual void Tick(float DeltaTime) override;
 	void ShootStart();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
@@ -72,7 +71,7 @@ protected:
 		UNiagaraSystem* OnDamagedParticles;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Particles")
-		UParticleSystem* OnDestroyedParticles;
+		UNiagaraSystem* OnDestroyedParticles;
 
 	FTimerHandle ShootTimer;
 };

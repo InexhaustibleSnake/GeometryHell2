@@ -20,8 +20,7 @@ public:
 
 	void UpdateEnemiesInFight(int32 Amount);
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		int32 EnemiesInFight = 0;
+	int32 EnemiesInFight = 0;
 
 protected:
 	virtual void BeginPlay() override;
@@ -39,7 +38,6 @@ private:
 	void ChangePlayingOst();
 	void FadeMusicOut();
 	void OnPlayerDeath();
-
 
 	FTimerHandle FadeOutTimer;
 };

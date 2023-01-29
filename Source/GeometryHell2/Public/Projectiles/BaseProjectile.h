@@ -20,7 +20,7 @@ public:
 
 	void SetShotDirection(const FVector& Direction) { ShotDirection = Direction; }
 	void SetDamage(float Damage) { BaseDamage = Damage; }
-	float GetDamage() { return BaseDamage; }
+	float GetDamage() const { return BaseDamage; }
    
 protected:
 	virtual void BeginPlay() override;
@@ -34,9 +34,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Properities")
 		float LifeSpan = 5.0f;
 
-	FName TagToIgnore;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Properities")
+		float BaseDamage = 10.0f;
 
-	float BaseDamage = 10.0f;
+	FName TagToIgnore;
 	FVector ShotDirection;
 
 	UFUNCTION()
