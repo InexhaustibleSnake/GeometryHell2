@@ -55,6 +55,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health")
 		float FireRate = 1.0f;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Cores")
+		float CoresForDeath = 10.0f;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Projectile")
 		TSubclassOf<ABaseProjectile> MainProjectile;
 

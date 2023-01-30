@@ -11,6 +11,7 @@ class UCameraComponent;
 class UWeaponComponent;
 class UHealthComponent;
 class UAbilityComponent;
+class UStaminaComponent;
 
 UCLASS()
 class GEOMETRYHELL2_API AEmancipator : public ACharacter
@@ -19,7 +20,6 @@ class GEOMETRYHELL2_API AEmancipator : public ACharacter
 
 public:
 	AEmancipator();
-	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 protected:
@@ -36,6 +36,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 		UAbilityComponent* AbilityComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+		UStaminaComponent* StaminaComponent;
 
 private:
 

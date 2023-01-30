@@ -5,7 +5,6 @@
 UHealthComponent::UHealthComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
-
 }
 
 void UHealthComponent::BeginPlay()
@@ -28,10 +27,9 @@ void UHealthComponent::SetHealth(float Amount)
 	if (Health == 0)
 	{
 		OnDeath.Broadcast();
-		GetOwner()->Destroy();
 	}
 	else
 	{
-		OnHealthChanged.Broadcast(Health);
+		OnHealthChanged.Broadcast();
 	}
 }

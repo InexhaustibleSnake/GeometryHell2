@@ -6,6 +6,7 @@
 #include "Player/Components/WeaponComponent.h"
 #include "Player/Components/HealthComponent.h"
 #include "Player/Components/AbilityComponent.h"
+#include "Player/Components/StaminaComponent.h"
 
 AEmancipator::AEmancipator()
 {
@@ -15,22 +16,18 @@ AEmancipator::AEmancipator()
 	MainCamera->SetupAttachment(GetRootComponent());
 
 	GetMesh()->SetupAttachment(MainCamera);
+	GetMesh()->CastShadow = false;
 
 	WeaponComponent = CreateDefaultSubobject<UWeaponComponent>("UWeaponComponent");
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>("HealthComponent");
 	AbilityComponent = CreateDefaultSubobject<UAbilityComponent>("AbilityComponent");
+	StaminaComponent = CreateDefaultSubobject<UStaminaComponent>("StaminaComponent");
 }
 
 void AEmancipator::BeginPlay()
 {
 	Super::BeginPlay();
 	
-}
-
-void AEmancipator::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 
 void AEmancipator::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -54,6 +51,9 @@ void AEmancipator::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction<FAbilityComponentSignature>("StopTime", IE_Pressed, AbilityComponent, &UAbilityComponent::TimeManager, true);
 	PlayerInputComponent->BindAction("SlowTime", IE_Released, AbilityComponent, &UAbilityComponent::RestoreTime);
 	PlayerInputComponent->BindAction("StopTime", IE_Released, AbilityComponent, &UAbilityComponent::RestoreTime);
+
+	PlayerInputComponent->BindAction("StartSprinting", IE_Pressed, StaminaComponent, &UStaminaComponent::StartSprinting);
+	PlayerInputComponent->BindAction("StartSprinting", IE_Released, StaminaComponent, &UStaminaComponent::StopSprinting);
 }
 
 void AEmancipator::MoveForward(float Amount)

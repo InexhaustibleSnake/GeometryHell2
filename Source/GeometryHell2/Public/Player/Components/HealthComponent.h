@@ -6,7 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "HealthComponent.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChanged, float, NewHealth);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHealthChanged);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeath);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -22,6 +22,9 @@ public:
 	
 	UPROPERTY(BlueprintAssignable)
 		FOnDeath OnDeath;
+
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE float GetHealthPercent() const { return Health / MaxHealth; }
 
 protected:
 	virtual void BeginPlay() override;

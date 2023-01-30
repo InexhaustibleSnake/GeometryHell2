@@ -6,7 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "AbilityComponent.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAbilityStaminaChange, float, NewAbilityStamina);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAbilityStaminaChange);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class GEOMETRYHELL2_API UAbilityComponent : public UActorComponent

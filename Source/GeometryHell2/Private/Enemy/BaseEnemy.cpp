@@ -7,6 +7,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "Enemy/BaseAIController.h"
 #include "Projectiles/BaseProjectile.h"
+#include "Logic/MainGameInstance.h"
 
 ABaseEnemy::ABaseEnemy()
 {
@@ -53,7 +54,14 @@ void ABaseEnemy::Destroyed()
 {
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), OnDestroyedParticles, CannonMesh->GetComponentLocation(), GetActorRotation());
 	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), DeathSound, GetActorLocation());
+
+	auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
+	if (!GameInstance) return;
+
+	GameInstance->AddCores(CoresForDeath);
+
 	OnDeath.Broadcast();
+
 	Destroy();
 }
 

@@ -62,7 +62,7 @@ void UAbilityComponent::DecreaseAbilityStamina()
 	}
 
 	AbilityStamina -= FMath::Clamp(TimeStopActive ? AbilityStaminaReduceStopTimeAmount : AbilityStaminaReduceSlowTimeAmount, 0.0f, MaxAbilityStamina);
-	OnAbilityStaminaChange.Broadcast(AbilityStamina);
+	OnAbilityStaminaChange.Broadcast();
 }
 
 void UAbilityComponent::RestoreTime()
@@ -84,5 +84,5 @@ void UAbilityComponent::RestoreAbilityStamina()
 	if (AbilityStaminaIsFull()) { GetWorld()->GetTimerManager().ClearTimer(StaminaRestoreTimer); }
 
 	AbilityStamina = FMath::Clamp(AbilityStamina + AbilityStaminaRestore, 0.0f, MaxAbilityStamina);
-	OnAbilityStaminaChange.Broadcast(AbilityStamina);
+	OnAbilityStaminaChange.Broadcast();
 }
