@@ -16,4 +16,7 @@ class GEOMETRYHELL2_API AShotgunWeapon : public ABaseWeapon
 protected:
 	virtual void MakeShot() override;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+		int32 NumOfProjectiles = 1;
+
 };

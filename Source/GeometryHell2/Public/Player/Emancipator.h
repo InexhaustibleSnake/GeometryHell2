@@ -41,7 +41,9 @@ protected:
 		UStaminaComponent* StaminaComponent;
 
 private:
-
 	void MoveForward(float Amount);
 	void MoveRight(float Amount);
+
+	void SaveGame();
+	void LoadGame();
 };

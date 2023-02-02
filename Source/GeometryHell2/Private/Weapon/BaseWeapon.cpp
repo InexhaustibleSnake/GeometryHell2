@@ -20,7 +20,7 @@ void ABaseWeapon::BeginPlay()
 
 void ABaseWeapon::StartFire()
 {
-	GetWorldTimerManager().SetTimer(FireTimer, this, &ABaseWeapon::MakeShot, WeaponParams.FireRate, true, 0.0f);
+	GetWorldTimerManager().SetTimer(FireTimer, this, &ABaseWeapon::MakeShot, FireRate, true, 0.0f);
 }
 
 void ABaseWeapon::StopFire()
@@ -40,7 +40,7 @@ void ABaseWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd)
 
 	GetPlayerController()->GetPlayerViewPoint(ViewLocation, ViewRotation);
 
-	const auto HalfRad = FMath::DegreesToRadians(WeaponParams.Accuracy);
+	const auto HalfRad = FMath::DegreesToRadians(Accuracy);
 	const FVector ShootDirection = FMath::VRandCone(ViewRotation.Vector(), HalfRad);
 
 	TraceStart = ViewLocation;

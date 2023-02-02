@@ -30,10 +30,10 @@ void ABlasterWeapon::MakeShot()
 
 		Projectile->SetOwner(GetOwner());
 		Projectile->SetShotDirection(Direction);
-		Projectile->SetDamage(WeaponParams.ProjectileDamage);
+		Projectile->SetDamage(ProjectileDamage);
 		Projectile->FinishSpawning(SpawnTransform);
 
-		GetWorldTimerManager().SetTimer(DelayTimer, this, &ABaseWeapon::ControlFireDelay, WeaponParams.FireRate, false);
+		GetWorldTimerManager().SetTimer(DelayTimer, this, &ABaseWeapon::ControlFireDelay, FireRate, false);
 	}
 
 }

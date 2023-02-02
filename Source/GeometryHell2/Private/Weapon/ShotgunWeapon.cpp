@@ -20,7 +20,7 @@ void AShotgunWeapon::MakeShot()
 	FVector Direction = (EndPoint - GetMuzzleWorldLocation()).GetSafeNormal();
 	const FTransform SpawnTransform(FRotator::ZeroRotator, GetMuzzleWorldLocation());
 
-	for (int NumberOfShots = 0; NumberOfShots < WeaponParams.NumOfProjectiles; ++NumberOfShots)
+	for (int NumberOfShots = 0; NumberOfShots < NumOfProjectiles; ++NumberOfShots)
 	{
 		ABaseProjectile* Projectile = GetWorld()->SpawnActorDeferred<ABaseProjectile>(ProjectileToSpawn, SpawnTransform);
 		if (Projectile)
@@ -31,15 +31,15 @@ void AShotgunWeapon::MakeShot()
 				Projectile->SetDamage(Projectile->GetDamage() * 1.5);
 			}
 
-			const auto HalfRad = FMath::DegreesToRadians(WeaponParams.Accuracy);
+			const auto HalfRad = FMath::DegreesToRadians(Accuracy);
 			const FVector ShootDirection = FMath::VRandCone(Direction, HalfRad);
 			
 			Projectile->SetOwner(GetOwner());
 			Projectile->SetShotDirection(ShootDirection);
-			Projectile->SetDamage(WeaponParams.ProjectileDamage);
+			Projectile->SetDamage(ProjectileDamage);
 			Projectile->FinishSpawning(SpawnTransform);
 
-			GetWorldTimerManager().SetTimer(DelayTimer, this, &ABaseWeapon::ControlFireDelay, WeaponParams.FireRate, false);
+			GetWorldTimerManager().SetTimer(DelayTimer, this, &ABaseWeapon::ControlFireDelay, FireRate, false);
 		}
 	}
 }

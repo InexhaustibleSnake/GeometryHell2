@@ -31,6 +31,7 @@ void UStaminaComponent::StopSprinting()
 
 void UStaminaComponent::StaminaReduce()
 {
+	if (GetOwner()->GetVelocity().IsZero()) return;
 	if (IsStaminaEmpty() || Stamina < 0.0f)
 	{
 		GetOwner()->GetWorldTimerManager().SetTimer(SprintTimer, this, &UStaminaComponent::StaminaRecovery, StaminaRecoveryRate, true, 0.0f);

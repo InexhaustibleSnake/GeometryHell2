@@ -7,6 +7,8 @@
 #include "Player/Components/HealthComponent.h"
 #include "Player/Components/AbilityComponent.h"
 #include "Player/Components/StaminaComponent.h"
+#include "Logic/MainGameMode.h"
+#include "Kismet/GameplayStatics.h"
 
 AEmancipator::AEmancipator()
 {
@@ -54,6 +56,9 @@ void AEmancipator::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 	PlayerInputComponent->BindAction("StartSprinting", IE_Pressed, StaminaComponent, &UStaminaComponent::StartSprinting);
 	PlayerInputComponent->BindAction("StartSprinting", IE_Released, StaminaComponent, &UStaminaComponent::StopSprinting);
+
+	PlayerInputComponent->BindAction("SaveGame", IE_Released, this, &AEmancipator::SaveGame);
+	PlayerInputComponent->BindAction("LoadGame", IE_Released, this, &AEmancipator::LoadGame);
 }
 
 void AEmancipator::MoveForward(float Amount)
@@ -64,4 +69,16 @@ void AEmancipator::MoveForward(float Amount)
 void AEmancipator::MoveRight(float Amount)
 {
 	AddMovementInput(GetActorRightVector(), Amount);
+}
+
+void AEmancipator::SaveGame()
+{
+	auto GameModeInstance = Cast<AMainGameMode>(GetWorld()->GetAuthGameMode());
+	GameModeInstance->SaveGame();
+}
+
+void AEmancipator::LoadGame()
+{
+	auto GameModeInstance = Cast<AMainGameMode>(GetWorld()->GetAuthGameMode());
+	GameModeInstance->LoadGame();
 }

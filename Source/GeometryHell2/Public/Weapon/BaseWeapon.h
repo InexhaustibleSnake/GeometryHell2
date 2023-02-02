@@ -7,26 +7,6 @@
 #include "BaseWeapon.generated.h"
 
 class USkeletalMeshComponent;
-
-USTRUCT(BlueprintType)
-struct FWeaponParameters
-{
-	GENERATED_USTRUCT_BODY()
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
-		float ProjectileDamage;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
-		float FireRate;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
-		float Accuracy;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
-		int32 NumOfProjectiles;
-
-};
-
 class ABaseProjectile;
 
 UCLASS()
@@ -46,8 +26,14 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void MakeShot();
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	FWeaponParameters WeaponParams{ 1, 0.2f, 2.0f };
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+		float ProjectileDamage = 5.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+		float FireRate = 1.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+		float Accuracy = 3.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 		USkeletalMeshComponent* WeaponMesh;

@@ -39,9 +39,14 @@ void ABaseEnemy::BeginPlay()
 void ABaseEnemy::OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
 	Health = FMath::Clamp(Health - Damage, 0.0f, MaxHealth);
+
 	if (Health <= 0)
 	{
 		Destroyed();
+		auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
+		if (!GameInstance) return;
+
+		GameInstance->AddCores(CoresForDeath);
 		return;
 	}
 
@@ -55,10 +60,7 @@ void ABaseEnemy::Destroyed()
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), OnDestroyedParticles, CannonMesh->GetComponentLocation(), GetActorRotation());
 	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), DeathSound, GetActorLocation());
 
-	auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
-	if (!GameInstance) return;
-
-	GameInstance->AddCores(CoresForDeath);
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("This is an on screen message!"));
 
 	OnDeath.Broadcast();
 
