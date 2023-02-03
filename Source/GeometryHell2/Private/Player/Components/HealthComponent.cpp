@@ -7,6 +7,15 @@ UHealthComponent::UHealthComponent()
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
+bool UHealthComponent::TryToAddHealth(float Amount)
+{
+	if (IsHealthFull()) return false;
+
+	Health = FMath::Clamp(Health + Amount, 0.0f, MaxHealth);
+	OnHealthChanged.Broadcast();
+	return true;
+}
+
 void UHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();

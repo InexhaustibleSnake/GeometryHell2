@@ -18,10 +18,14 @@ class GEOMETRYHELL2_API ABaseAIController : public AAIController
 public:
 	ABaseAIController();
 
+	UFUNCTION()
+		void OnDestroy();
+
 protected:
 	virtual void OnPossess(APawn* InPawn) override;
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
+	void UpdateEnemiesInFight(int32 Amount);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 		UAIPerceptionComponent* AIPerceptionComponent;
@@ -32,9 +36,6 @@ protected:
 private:
 	UFUNCTION()
 	void ActorsUpdated(TArray<AActor*> const& UpdatedActors);
-	void UpdateEnemiesInFight(int32 Amount);
-	UFUNCTION()
-	void OnDestroy();
 
 	AEmancipator* Player;
 

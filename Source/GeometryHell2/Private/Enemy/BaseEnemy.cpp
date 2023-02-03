@@ -5,7 +5,6 @@
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
 #include "NiagaraFunctionLibrary.h"
-#include "Enemy/BaseAIController.h"
 #include "Projectiles/BaseProjectile.h"
 #include "Logic/MainGameInstance.h"
 
@@ -47,6 +46,9 @@ void ABaseEnemy::OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageT
 		if (!GameInstance) return;
 
 		GameInstance->AddCores(CoresForDeath);
+
+		OnDeath.Broadcast();
+		Destroyed();
 		return;
 	}
 
@@ -59,10 +61,6 @@ void ABaseEnemy::Destroyed()
 {
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), OnDestroyedParticles, CannonMesh->GetComponentLocation(), GetActorRotation());
 	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), DeathSound, GetActorLocation());
-
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("This is an on screen message!"));
-
-	OnDeath.Broadcast();
 
 	Destroy();
 }

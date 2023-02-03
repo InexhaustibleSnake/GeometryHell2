@@ -16,6 +16,8 @@ class GEOMETRYHELL2_API UHealthComponent : public UActorComponent
 
 public:	
 	UHealthComponent();
+	float IsHealthFull() const { return Health == MaxHealth; }
+	bool TryToAddHealth(float Amount);
 
 	UPROPERTY(BlueprintAssignable)
 	    FOnHealthChanged OnHealthChanged;

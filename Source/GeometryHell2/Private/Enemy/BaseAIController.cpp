@@ -20,6 +20,7 @@ void ABaseAIController::OnPossess(APawn* InPawn)
     if (Enemy)
     {
         RunBehaviorTree(Enemy->BehaviorTreeAsset);
+        Enemy->OnDeath.AddUObject(this, &ABaseAIController::OnDestroy);
     }
 }
 
@@ -29,9 +30,6 @@ void ABaseAIController::BeginPlay()
     Player = Cast<AEmancipator>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
     GetPerceptionComponent()->OnPerceptionUpdated.AddDynamic(this, &ABaseAIController::ActorsUpdated);
-  
-    ABaseEnemy* EnemyOwner = Cast<ABaseEnemy>(GetPawn());
-    EnemyOwner->OnDeath.AddUObject(this, &ABaseAIController::OnDestroy);
 }
 
 void ABaseAIController::Tick(float DeltaTime)
@@ -46,23 +44,22 @@ void ABaseAIController::ActorsUpdated(TArray<AActor*> const& UpdatedActors)
     for (auto PerceivedActor : UpdatedActors)
     {
         if (PerceivedActor == Player)
-        {
+        {       
             if (!SpotPlayer)
             {
+                SpotPlayer = true;
+                const auto EnemyOwner = Cast<ABaseEnemy>(GetPawn());
+                EnemyOwner->ShootStart();
                 UpdateEnemiesInFight(1);
             }
-            
-            SpotPlayer = true;
-            const auto EnemyOwner = Cast<ABaseEnemy>(GetPawn());
-            EnemyOwner->ShootStart();
         }
     }
 }
 
 void ABaseAIController::UpdateEnemiesInFight(int32 Amount)
 {
-    if (!GetWorld()) return;
-    AMainPlayerController* PlayerController = Cast<AMainPlayerController>(GetWorld()->GetFirstPlayerController());
+    auto PlayerController = Cast<AMainPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+    if (!PlayerController) return;
     PlayerController->UpdateEnemiesInFight(Amount);
 }
 
