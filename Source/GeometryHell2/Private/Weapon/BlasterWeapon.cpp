@@ -23,14 +23,10 @@ void ABlasterWeapon::MakeShot()
 	if (Projectile)
 	{
 		CanFire = false;
-		if (GetOwner()->CustomTimeDilation > 1.0f) 
-		{
-			Projectile->SetDamage(Projectile->GetDamage() * 1.5);
-		}
 
 		Projectile->SetOwner(GetOwner());
 		Projectile->SetShotDirection(Direction);
-		Projectile->SetDamage(ProjectileDamage);
+		Projectile->SetDamage(GetOwner()->CustomTimeDilation > 1.0f ? ProjectileDamage * 1.5 : ProjectileDamage);
 		Projectile->FinishSpawning(SpawnTransform);
 
 		GetWorldTimerManager().SetTimer(DelayTimer, this, &ABaseWeapon::ControlFireDelay, FireRate, false);

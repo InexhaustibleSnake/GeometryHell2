@@ -1,4 +1,4 @@
-// Geometry Hell 2. Made By Alexey Guchmazov
+ // Geometry Hell 2. Made By Alexey Guchmazov
 
 
 #include "Weapon/ShotgunWeapon.h"
@@ -26,17 +26,12 @@ void AShotgunWeapon::MakeShot()
 		if (Projectile)
 		{
 			CanFire = false;
-			if (GetOwner()->CustomTimeDilation > 1.0f)
-			{
-				Projectile->SetDamage(Projectile->GetDamage() * 1.5);
-			}
-
 			const auto HalfRad = FMath::DegreesToRadians(Accuracy);
 			const FVector ShootDirection = FMath::VRandCone(Direction, HalfRad);
 			
 			Projectile->SetOwner(GetOwner());
 			Projectile->SetShotDirection(ShootDirection);
-			Projectile->SetDamage(ProjectileDamage);
+			Projectile->SetDamage(GetOwner()->CustomTimeDilation > 1.0f ? ProjectileDamage * 1.5 : ProjectileDamage);
 			Projectile->FinishSpawning(SpawnTransform);
 
 			GetWorldTimerManager().SetTimer(DelayTimer, this, &ABaseWeapon::ControlFireDelay, FireRate, false);

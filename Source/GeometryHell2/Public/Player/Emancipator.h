@@ -21,7 +21,7 @@ class GEOMETRYHELL2_API AEmancipator : public ACharacter
 public:
 	AEmancipator();
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	
 protected:
 	virtual void BeginPlay() override;
 
@@ -43,6 +43,7 @@ protected:
 private:
 	void MoveForward(float Amount);
 	void MoveRight(float Amount);
+	void Interact();
 
 	void SaveGame();
 	void LoadGame();

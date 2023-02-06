@@ -1,8 +1,11 @@
 // Geometry Hell 2. Made By Alexey Guchmazov
 
 #include "Projectiles/Enemy/EnemyProjectile.h"
+#include "Enemy/BaseEnemy.h"
 
-AEnemyProjectile::AEnemyProjectile()
+void AEnemyProjectile::OnCollision(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit)
 {
-	TagToIgnore = "Enemy";
+	if (OtherActor->IsA(ABaseEnemy::StaticClass())) return;
+	OtherActor->TakeDamage(BaseDamage, FDamageEvent{}, nullptr, nullptr);
+	Destroy();
 }

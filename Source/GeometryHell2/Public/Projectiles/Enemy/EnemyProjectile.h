@@ -10,8 +10,8 @@ UCLASS()
 class GEOMETRYHELL2_API AEnemyProjectile : public ABaseProjectile
 {
 	GENERATED_BODY()
-	
-public:
 
-	AEnemyProjectile();
+protected:
+
+	virtual void OnCollision(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit) override;
 };

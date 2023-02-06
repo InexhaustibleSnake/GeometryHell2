@@ -9,6 +9,8 @@
 #include "Player/Components/StaminaComponent.h"
 #include "Logic/MainGameMode.h"
 #include "Kismet/GameplayStatics.h"
+#include "Logic/InteractComponent.h"
+#include "DrawDebugHelpers.h"
 
 AEmancipator::AEmancipator()
 {
@@ -53,12 +55,15 @@ void AEmancipator::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction<FAbilityComponentSignature>("StopTime", IE_Pressed, AbilityComponent, &UAbilityComponent::TimeManager, true);
 	PlayerInputComponent->BindAction("SlowTime", IE_Released, AbilityComponent, &UAbilityComponent::RestoreTime);
 	PlayerInputComponent->BindAction("StopTime", IE_Released, AbilityComponent, &UAbilityComponent::RestoreTime);
+	PlayerInputComponent->BindAction("Dash", IE_Pressed, AbilityComponent, &UAbilityComponent::Dash);
 
 	PlayerInputComponent->BindAction("StartSprinting", IE_Pressed, StaminaComponent, &UStaminaComponent::StartSprinting);
 	PlayerInputComponent->BindAction("StartSprinting", IE_Released, StaminaComponent, &UStaminaComponent::StopSprinting);
 
 	PlayerInputComponent->BindAction("SaveGame", IE_Released, this, &AEmancipator::SaveGame);
 	PlayerInputComponent->BindAction("LoadGame", IE_Released, this, &AEmancipator::LoadGame);
+
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AEmancipator::Interact);
 }
 
 void AEmancipator::MoveForward(float Amount)
@@ -69,6 +74,22 @@ void AEmancipator::MoveForward(float Amount)
 void AEmancipator::MoveRight(float Amount)
 {
 	AddMovementInput(GetActorRightVector(), Amount);
+}
+
+void AEmancipator::Interact()
+{
+	FVector TraceStart, TraceEnd;
+	FRotator TraceRotation;
+	GetController()->GetPlayerViewPoint(TraceStart, TraceRotation);
+	TraceEnd = TraceStart + TraceRotation.Vector() * 400.0f;
+	FHitResult HitResult;
+	//DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 2.0f, 0.0f, 3.0f);
+	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility);
+	if (HitResult.bBlockingHit)
+	{
+		auto InteractComponent = Cast<UInteractComponent>(HitResult.Actor->GetComponentByClass(UInteractComponent::StaticClass()));
+		InteractComponent->OnInteract.Broadcast();
+	}
 }
 
 void AEmancipator::SaveGame()

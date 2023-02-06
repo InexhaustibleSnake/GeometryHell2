@@ -17,6 +17,7 @@ public:
 	UAbilityComponent();
 	void TimeManager(bool StopTime);
 	void RestoreTime();
+	void Dash();
 
 	UPROPERTY(BlueprintAssignable)
 	FOnAbilityStaminaChange OnAbilityStaminaChange;
@@ -27,6 +28,7 @@ protected:
 	void EnableTimeStop();
 	void DecreaseAbilityStamina();
 	void RestoreAbilityStamina();
+	
 	FORCEINLINE float GetAbilityStamina() const { return AbilityStamina; }
 	FORCEINLINE float AbilityStaminaIsFull() const { return FMath::IsNearlyEqual(AbilityStamina, MaxAbilityStamina); }
 
@@ -62,6 +64,12 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "StopTime")
 		float AbilityStaminaReduceStopTimeAmount = 1.5f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Dash")
+		float DashStrength = 800.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Dash")
+		float DashStaminaUsage = 5.0f;
 
 private:
 

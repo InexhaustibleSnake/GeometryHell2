@@ -2,6 +2,11 @@
 
 #include "Player/Components/AbilityComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Player/Emancipator.h"
+#include "GameFramework/Character.h"
+#include "DrawDebugHelpers.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/MovementComponent.h"
 
 UAbilityComponent::UAbilityComponent()
 {
@@ -85,4 +90,29 @@ void UAbilityComponent::RestoreAbilityStamina()
 
 	AbilityStamina = FMath::Clamp(AbilityStamina + AbilityStaminaRestore, 0.0f, MaxAbilityStamina);
 	OnAbilityStaminaChange.Broadcast();
+}
+
+void UAbilityComponent::Dash()
+{
+	if (AbilityStamina <= 5.0f) return;
+
+	FVector TraceStart, TraceEnd;
+	FRotator TraceRotation;
+	auto Player = Cast<ACharacter>(GetOwner());
+	
+	Player->GetController()->GetPlayerViewPoint(TraceStart, TraceRotation);
+	TraceEnd = TraceStart + Player->GetActorForwardVector() * DashStrength;
+
+	FHitResult HitResult;
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor(GetOwner());
+	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility, CollisionParams);
+	
+	Player->SetActorLocation(HitResult.bBlockingHit ? HitResult.ImpactPoint : TraceEnd);
+
+	AbilityStamina = FMath::Clamp(AbilityStamina - DashStaminaUsage, 0.0f, MaxAbilityStamina);
+
+	Player->GetCharacterMovement()->StopMovementImmediately();
+
+	GetWorld()->GetTimerManager().SetTimer(StaminaRestoreTimer, this, &UAbilityComponent::RestoreAbilityStamina, AbilityStaminaRestoreRate, true, 0.0f);
 }
