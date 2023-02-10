@@ -29,6 +29,8 @@ void ABlasterWeapon::MakeShot()
 		Projectile->SetDamage(GetOwner()->CustomTimeDilation > 1.0f ? ProjectileDamage * 1.5 : ProjectileDamage);
 		Projectile->FinishSpawning(SpawnTransform);
 
+		PlayCameraShake();
+
 		GetWorldTimerManager().SetTimer(DelayTimer, this, &ABaseWeapon::ControlFireDelay, FireRate, false);
 	}
 

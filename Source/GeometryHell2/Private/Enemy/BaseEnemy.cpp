@@ -6,7 +6,7 @@
 #include "Sound/SoundCue.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Projectiles/BaseProjectile.h"
-#include "Logic/MainGameInstance.h"
+#include "Player/Components/StyleComponent.h"
 
 ABaseEnemy::ABaseEnemy()
 {
@@ -42,10 +42,12 @@ void ABaseEnemy::OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageT
 	if (Health <= 0)
 	{
 		Destroyed();
-		auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
-		if (!GameInstance) return;
+		const auto Player = Cast<APawn>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+		auto PlayerController = Cast<APlayerController>(Player->GetController());
 
-		GameInstance->AddCores(CoresForDeath);
+		auto StyleComponent = PlayerController->FindComponentByClass<UStyleComponent>();
+		StyleComponent->AddStylePoints(StylePointForKill);
+		StyleComponent->AddCores(CoresForKill);
 
 		OnDeath.Broadcast();
 		Destroyed();

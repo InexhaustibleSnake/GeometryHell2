@@ -10,8 +10,4 @@ UCLASS()
 class GEOMETRYHELL2_API AMainGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
-	
-public:
-	void SaveGame();
-	void LoadGame();
 };

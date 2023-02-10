@@ -2,6 +2,9 @@
 
 #include "Weapon/BaseWeapon.h"
 #include "GameFramework/Pawn.h"
+#include "Camera/CameraShakeBase.h"
+#include "GameFramework/Pawn.h"
+#include "GameFramework/Controller.h"
 
 ABaseWeapon::ABaseWeapon()
 {
@@ -63,4 +66,15 @@ const AController* ABaseWeapon::GetPlayerController()
 FVector ABaseWeapon::GetMuzzleWorldLocation()
 {
 	return WeaponMesh->GetSocketLocation("Muzzle");
+}
+
+void ABaseWeapon::PlayCameraShake()
+{
+	const auto PlayerPawn = Cast<APawn>(GetOwner());
+	if (!PlayerPawn) return;
+
+	const auto Controller = PlayerPawn->GetController<APlayerController>();
+	if (!Controller && !Controller->PlayerCameraManager) return;
+
+	Controller->PlayerCameraManager->StartCameraShake(CameraShake);
 }

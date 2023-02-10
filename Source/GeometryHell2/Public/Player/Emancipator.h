@@ -44,7 +44,4 @@ private:
 	void MoveForward(float Amount);
 	void MoveRight(float Amount);
 	void Interact();
-
-	void SaveGame();
-	void LoadGame();
 };

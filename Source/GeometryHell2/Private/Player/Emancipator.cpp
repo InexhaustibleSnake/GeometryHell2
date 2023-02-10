@@ -60,9 +60,6 @@ void AEmancipator::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction("StartSprinting", IE_Pressed, StaminaComponent, &UStaminaComponent::StartSprinting);
 	PlayerInputComponent->BindAction("StartSprinting", IE_Released, StaminaComponent, &UStaminaComponent::StopSprinting);
 
-	PlayerInputComponent->BindAction("SaveGame", IE_Released, this, &AEmancipator::SaveGame);
-	PlayerInputComponent->BindAction("LoadGame", IE_Released, this, &AEmancipator::LoadGame);
-
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AEmancipator::Interact);
 }
 
@@ -90,16 +87,4 @@ void AEmancipator::Interact()
 		auto InteractComponent = Cast<UInteractComponent>(HitResult.Actor->GetComponentByClass(UInteractComponent::StaticClass()));
 		InteractComponent->OnInteract.Broadcast();
 	}
-}
-
-void AEmancipator::SaveGame()
-{
-	auto GameModeInstance = Cast<AMainGameMode>(GetWorld()->GetAuthGameMode());
-	GameModeInstance->SaveGame();
-}
-
-void AEmancipator::LoadGame()
-{
-	auto GameModeInstance = Cast<AMainGameMode>(GetWorld()->GetAuthGameMode());
-	GameModeInstance->LoadGame();
 }

@@ -4,6 +4,6 @@
 
 void UMainGameInstance::AddCores(float Amount)
 {
-	NumOfCores += Amount; //FMath::Clamp(NumOfCores + Amount, 0.0f, MaxCores);
+	NumOfCores += Amount;
 }
 
