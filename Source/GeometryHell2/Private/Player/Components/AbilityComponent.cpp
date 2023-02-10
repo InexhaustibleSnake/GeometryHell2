@@ -17,6 +17,10 @@ void UAbilityComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	AbilityStamina = MaxAbilityStamina;
+	const auto Player = Cast<ACharacter>(GetOwner());
+	if (!Player) return;
+	const auto MovementComponent = Player->FindComponentByClass<UCharacterMovementComponent>();
+	PlayerGravityScale = MovementComponent->GravityScale;
 }
 
 void UAbilityComponent::TimeManager(bool StopTime)
@@ -94,7 +98,27 @@ void UAbilityComponent::RestoreAbilityStamina()
 
 void UAbilityComponent::Dash()
 {
+	const auto Player = Cast<ACharacter>(GetOwner());
+	if (!Player) return;
+	auto MovementComponent = Player->FindComponentByClass<UCharacterMovementComponent>();
+
 	if (AbilityStamina <= 5.0f) return;
+	
+	if (MovementComponent->IsFalling())
+	{
+		MovementComponent->AddImpulse(Player->GetActorForwardVector() * InAirDashStrength);
+ 
+		GetWorld()->GetTimerManager().SetTimer(DashTimer, this, &UAbilityComponent::RestoreGravityAfterDash, 0.1f, false, 0.1f);
+	}
+	else
+	{
+		MovementComponent->AddImpulse(Player->GetActorForwardVector() * OnFloorDashStrength);
+	}
+
+	GetWorld()->GetTimerManager().SetTimer(StaminaRestoreTimer, this, &UAbilityComponent::RestoreAbilityStamina, AbilityStaminaRestoreRate, true, 0.0f);
+	AbilityStamina = FMath::Clamp(AbilityStamina - DashStaminaUsage, 0.0f, MaxAbilityStamina);
+	
+	/*if (AbilityStamina <= 5.0f) return;
 
 	FVector TraceStart, TraceEnd;
 	FRotator TraceRotation;
@@ -114,5 +138,14 @@ void UAbilityComponent::Dash()
 
 	Player->GetCharacterMovement()->StopMovementImmediately();
 
-	GetWorld()->GetTimerManager().SetTimer(StaminaRestoreTimer, this, &UAbilityComponent::RestoreAbilityStamina, AbilityStaminaRestoreRate, true, 0.0f);
+	GetWorld()->GetTimerManager().SetTimer(StaminaRestoreTimer, this, &UAbilityComponent::RestoreAbilityStamina, AbilityStaminaRestoreRate, true, 0.0f);*/
+}
+
+void UAbilityComponent::RestoreGravityAfterDash()
+{
+	const auto Player = Cast<ACharacter>(GetOwner());
+	if (!Player) return;
+	auto MovementComponent = Player->FindComponentByClass<UCharacterMovementComponent>();
+	MovementComponent->GravityScale = PlayerGravityScale;
+	MovementComponent->StopMovementImmediately();
 }

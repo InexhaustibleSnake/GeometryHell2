@@ -1,6 +1,7 @@
 // Geometry Hell 2. Made By Alexey Guchmazov
 
 #include "Player/MainPlayerController.h"
+#include "Player/Components/StyleComponent.h"
 #include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
@@ -8,18 +9,37 @@
 AMainPlayerController::AMainPlayerController()
 {
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>("AudioComponent");
+	StyleComponent = CreateDefaultSubobject<UStyleComponent>("StyleComponent");
 }
 
 void AMainPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
 void AMainPlayerController::UpdateEnemiesInFight(int32 Amount)
 {
-	EnemiesInFight += Amount;
+	EnemiesInFight = FMath::Clamp(EnemiesInFight + Amount, 0, INT32_MAX);
+
 	ChangePlayingOst();
+
+	if (EnemiesInFight > 0)
+	{
+		if (GetWorldTimerManager().IsTimerActive(FightStateTimer))
+		{
+			GetWorldTimerManager().ClearTimer(FightStateTimer);
+		}
+		if (!IsPlayerInFight)
+		{
+			PlayerInFight.Broadcast(true);
+			IsPlayerInFight = true;
+		}
+	}
+	
+	if (EnemiesInFight == 0)
+	{
+		GetWorldTimerManager().SetTimer(FightStateTimer, this, &AMainPlayerController::OnFightEnd, 0.1f, false, TimeToChangeFightState);
+	}
 }
 
 void AMainPlayerController::ChangePlayingOst()
@@ -49,4 +69,11 @@ void AMainPlayerController::FadeMusicOut()
 void AMainPlayerController::OnPlayerDeath()
 {
 	UGameplayStatics::PlaySound2D(GetWorld(), GameOverOst);
+}
+
+void AMainPlayerController::OnFightEnd()
+{
+	IsPlayerInFight = false;
+	PlayerInFight.Broadcast(false);
+	StyleComponent->ClearStylePoints();
 }

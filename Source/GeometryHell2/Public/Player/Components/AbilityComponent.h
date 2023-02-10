@@ -66,14 +66,21 @@ protected:
 		float AbilityStaminaReduceStopTimeAmount = 1.5f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Dash")
-		float DashStrength = 800.0f;
+		float OnFloorDashStrength = 3800.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Dash")
+		float InAirDashStrength = 3000.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Dash")
 		float DashStaminaUsage = 5.0f;
 
 private:
+	float PlayerGravityScale = 1.0f;
+	void RestoreGravityAfterDash();
 
 	bool TimeStopActive = false;
 	FTimerHandle TimeManagerTimer;
 	FTimerHandle StaminaRestoreTimer;
+
+	FTimerHandle DashTimer;
 };
