@@ -67,7 +67,7 @@ protected:
 
 	EStyleType StyleType;
 
-	float StylePoints = 1.0f;
+	float StylePoints = 0.0f;
 	float MaxStylePoints = 4.0f;
 	float MinStylePoints = 0.0f;
 

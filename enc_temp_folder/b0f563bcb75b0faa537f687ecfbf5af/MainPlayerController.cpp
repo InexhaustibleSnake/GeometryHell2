@@ -73,7 +73,6 @@ void AMainPlayerController::OnPlayerDeath()
 
 void AMainPlayerController::OnFightEnd()
 {
-	if (EnemiesInFight > 0) return;
 	IsPlayerInFight = false;
 	PlayerInFight.Broadcast(false);
 	StyleComponent->ClearStylePoints();
