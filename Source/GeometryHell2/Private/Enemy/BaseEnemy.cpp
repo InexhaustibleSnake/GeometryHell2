@@ -7,6 +7,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "Projectiles/BaseProjectile.h"
 #include "Player/Components/StyleComponent.h"
+#include "Enemy/BaseAIController.h"
 
 ABaseEnemy::ABaseEnemy()
 {
@@ -57,6 +58,13 @@ void ABaseEnemy::OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageT
 	HealthRenderComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
 	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), DamagedSound, GetActorLocation());
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), OnDamagedParticles, CannonMesh->GetComponentLocation(), GetActorRotation());
+	
+	if (!GetWorldTimerManager().IsTimerActive(ShootTimer))
+	{
+		ShootStart();
+		auto AIController = Cast<ABaseAIController>(GetController());
+		AIController->SpotPlayer = true;
+	}
 }
 
 void ABaseEnemy::Destroyed()

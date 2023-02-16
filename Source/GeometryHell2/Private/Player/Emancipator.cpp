@@ -10,7 +10,6 @@
 #include "Logic/MainGameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "Logic/InteractComponent.h"
-#include "DrawDebugHelpers.h"
 
 AEmancipator::AEmancipator()
 {
@@ -80,11 +79,13 @@ void AEmancipator::Interact()
 	GetController()->GetPlayerViewPoint(TraceStart, TraceRotation);
 	TraceEnd = TraceStart + TraceRotation.Vector() * 400.0f;
 	FHitResult HitResult;
-	//DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 2.0f, 0.0f, 3.0f);
-	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility);
+	FCollisionQueryParams TraceParams;
+	TraceParams.AddIgnoredActor(this);
+	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility, TraceParams);
 	if (HitResult.bBlockingHit)
 	{
 		auto InteractComponent = Cast<UInteractComponent>(HitResult.Actor->GetComponentByClass(UInteractComponent::StaticClass()));
+		if (!InteractComponent) return;
 		InteractComponent->OnInteract.Broadcast();
 	}
 }

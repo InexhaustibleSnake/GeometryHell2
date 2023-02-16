@@ -7,6 +7,8 @@
 #include "DrawDebugHelpers.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/MovementComponent.h"
+#include "UObject/Object.h"
+#include "Engine/EngineTypes.h"
 
 UAbilityComponent::UAbilityComponent()
 {
@@ -25,28 +27,24 @@ void UAbilityComponent::BeginPlay()
 
 void UAbilityComponent::TimeManager(bool StopTime)
 {
-	if (!GetWorld() && GetWorld()->GetTimerManager().IsTimerActive(TimeManagerTimer)) return;
+	if (IsTimerActive(TimeManagerTimer)) return;
 	StopTime ? EnableTimeStop() : EnableSlowTime();
 }
 
 void UAbilityComponent::EnableSlowTime()
 {
-	if (GetWorld()->GetTimerManager().IsTimerActive(TimeManagerTimer)) return;
-
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), SlowTimeStrength);
 
-	GetWorld()->GetTimerManager().SetTimer(TimeManagerTimer, this, &UAbilityComponent::DecreaseAbilityStamina, AbilityStaminaReduceSlowTimeRate, true, 0.0f);
+	SetTimerInComponent(TimeManagerTimer, this, &UAbilityComponent::DecreaseAbilityStamina, AbilityStaminaReduceSlowTimeRate, true, 0.0f);
 
-	if (GetWorld()->GetTimerManager().IsTimerActive(StaminaRestoreTimer))
+	if (IsTimerActive(StaminaRestoreTimer))
 	{
-		GetWorld()->GetTimerManager().ClearTimer(StaminaRestoreTimer);
+		ClearTimer(StaminaRestoreTimer);
 	}
 }
 
 void UAbilityComponent::EnableTimeStop()
 {
-	if (GetWorld()->GetTimerManager().IsTimerActive(TimeManagerTimer)) return;
-
 	if (GetOwner()->GetVelocity().IsZero()) {
 		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), StopTimeStrength);
 
@@ -54,11 +52,11 @@ void UAbilityComponent::EnableTimeStop()
 
 		TimeStopActive = true;
 
-		GetWorld()->GetTimerManager().SetTimer(TimeManagerTimer, this, &UAbilityComponent::DecreaseAbilityStamina, AbilityStaminaReduceStopTimeRate, true, 0.0f);
+		SetTimerInComponent(TimeManagerTimer, this, &UAbilityComponent::DecreaseAbilityStamina, AbilityStaminaReduceStopTimeRate, true, 0.0f);
 
-		if (GetWorld()->GetTimerManager().IsTimerActive(StaminaRestoreTimer))
+		if (IsTimerActive(StaminaRestoreTimer))
 		{
-			GetWorld()->GetTimerManager().ClearTimer(StaminaRestoreTimer);
+			ClearTimer(StaminaRestoreTimer);
 		}
 	}
 }
@@ -76,21 +74,20 @@ void UAbilityComponent::DecreaseAbilityStamina()
 
 void UAbilityComponent::RestoreTime()
 {
-
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
-	GetWorld()->GetTimerManager().ClearTimer(TimeManagerTimer);
+	ClearTimer(TimeManagerTimer);
 	if (TimeStopActive)
 	{
 		GetOwner()->CustomTimeDilation = 1.0f;
 		TimeStopActive = false;
 	}
 
-	GetWorld()->GetTimerManager().SetTimer(StaminaRestoreTimer, this, &UAbilityComponent::RestoreAbilityStamina, AbilityStaminaRestoreRate, true, 0.0f);
+	SetTimerInComponent(StaminaRestoreTimer, this, &UAbilityComponent::RestoreAbilityStamina, AbilityStaminaRestoreRate, true, 0.0f);
 }
 
 void UAbilityComponent::RestoreAbilityStamina()
 {
-	if (AbilityStaminaIsFull()) { GetWorld()->GetTimerManager().ClearTimer(StaminaRestoreTimer); }
+	if (AbilityStaminaIsFull()) { ClearTimer(StaminaRestoreTimer); }
 
 	AbilityStamina = FMath::Clamp(AbilityStamina + AbilityStaminaRestore, 0.0f, MaxAbilityStamina);
 	OnAbilityStaminaChange.Broadcast();
@@ -107,38 +104,16 @@ void UAbilityComponent::Dash()
 	if (MovementComponent->IsFalling())
 	{
 		MovementComponent->AddImpulse(Player->GetActorForwardVector() * InAirDashStrength);
- 
-		GetWorld()->GetTimerManager().SetTimer(DashTimer, this, &UAbilityComponent::RestoreGravityAfterDash, 0.1f, false, 0.1f);
+        
+		SetTimerInComponent(DashTimer, this, &UAbilityComponent::RestoreGravityAfterDash, 0.1f, false, 0.1f);
 	}
 	else
 	{
 		MovementComponent->AddImpulse(Player->GetActorForwardVector() * OnFloorDashStrength);
 	}
 
-	GetWorld()->GetTimerManager().SetTimer(StaminaRestoreTimer, this, &UAbilityComponent::RestoreAbilityStamina, AbilityStaminaRestoreRate, true, 0.0f);
+	SetTimerInComponent(StaminaRestoreTimer, this, &UAbilityComponent::RestoreAbilityStamina, AbilityStaminaRestoreRate, true, 0.0f);
 	AbilityStamina = FMath::Clamp(AbilityStamina - DashStaminaUsage, 0.0f, MaxAbilityStamina);
-	
-	/*if (AbilityStamina <= 5.0f) return;
-
-	FVector TraceStart, TraceEnd;
-	FRotator TraceRotation;
-	auto Player = Cast<ACharacter>(GetOwner());
-	
-	Player->GetController()->GetPlayerViewPoint(TraceStart, TraceRotation);
-	TraceEnd = TraceStart + Player->GetActorForwardVector() * DashStrength;
-
-	FHitResult HitResult;
-	FCollisionQueryParams CollisionParams;
-	CollisionParams.AddIgnoredActor(GetOwner());
-	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility, CollisionParams);
-	
-	Player->SetActorLocation(HitResult.bBlockingHit ? HitResult.ImpactPoint : TraceEnd);
-
-	AbilityStamina = FMath::Clamp(AbilityStamina - DashStaminaUsage, 0.0f, MaxAbilityStamina);
-
-	Player->GetCharacterMovement()->StopMovementImmediately();
-
-	GetWorld()->GetTimerManager().SetTimer(StaminaRestoreTimer, this, &UAbilityComponent::RestoreAbilityStamina, AbilityStaminaRestoreRate, true, 0.0f);*/
 }
 
 void UAbilityComponent::RestoreGravityAfterDash()
@@ -148,4 +123,22 @@ void UAbilityComponent::RestoreGravityAfterDash()
 	auto MovementComponent = Player->FindComponentByClass<UCharacterMovementComponent>();
 	MovementComponent->GravityScale = PlayerGravityScale;
 	MovementComponent->StopMovementImmediately();
+}
+
+bool UAbilityComponent::TryToAddAbilityStamina(float Amount)
+{
+	if (AbilityStaminaIsFull()) return false;
+
+	AbilityStamina = FMath::Clamp(AbilityStamina + Amount, 0.0f, MaxAbilityStamina);
+	return true;
+}
+
+bool UAbilityComponent::IsTimerActive(FTimerHandle& Timer)
+{
+	return GetWorld()->GetTimerManager().IsTimerActive(Timer);
+}
+
+void UAbilityComponent::ClearTimer(FTimerHandle& Timer)
+{
+	GetWorld()->GetTimerManager().ClearTimer(Timer);
 }

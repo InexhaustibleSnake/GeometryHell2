@@ -22,12 +22,9 @@ void ABaseProjectile::BeginPlay()
 	SetLifeSpan(LifeSpan);
 	ProjectileMovementComponent->Velocity = ProjectileMovementComponent->InitialSpeed * ShotDirection;
 
-	BoxCollision->OnComponentBeginOverlap.AddDynamic(this, &ABaseProjectile::OnCollision);
+	BoxCollision->OnComponentHit.AddDynamic(this, &ABaseProjectile::OnProjectileHit);
 }
 
-void ABaseProjectile::OnCollision(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit)
+void ABaseProjectile::OnProjectileHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	if (OtherActor == GetOwner()) return;
-	OtherActor->TakeDamage(BaseDamage, FDamageEvent{}, nullptr, nullptr);
-	Destroy();
 }

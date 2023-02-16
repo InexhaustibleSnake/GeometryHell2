@@ -3,9 +3,15 @@
 #include "Projectiles/Enemy/EnemyProjectile.h"
 #include "Enemy/BaseEnemy.h"
 
-void AEnemyProjectile::OnCollision(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit)
+void AEnemyProjectile::OnProjectileHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	if (OtherActor->IsA(ABaseEnemy::StaticClass())) return;
+	if (!OtherActor)
+	{
+		Destroy();
+		return;
+	}
+	
+	if (OtherActor->GetClass()->IsChildOf(ABaseEnemy::StaticClass())) return;
 	OtherActor->TakeDamage(BaseDamage, FDamageEvent{}, nullptr, nullptr);
 	Destroy();
 }

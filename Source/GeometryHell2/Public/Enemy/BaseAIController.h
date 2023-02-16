@@ -21,6 +21,8 @@ public:
 	UFUNCTION()
 		void OnDestroy();
 
+	bool SpotPlayer = false;
+
 protected:
 	virtual void OnPossess(APawn* InPawn) override;
 	virtual void BeginPlay() override;
@@ -39,5 +41,4 @@ private:
 
 	AEmancipator* Player;
 
-	bool SpotPlayer = false;
 };

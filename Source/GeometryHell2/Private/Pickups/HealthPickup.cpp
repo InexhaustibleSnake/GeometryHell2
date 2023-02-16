@@ -7,12 +7,12 @@
 
 bool AHealthPickup::GivePickup(AActor* PlayerPawn)
 {
-	ACharacter* Player = Cast<ACharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	APawn* Player = Cast<APawn>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	
 	if (!Player) return false;
 	UHealthComponent* HealthComponent = Player->FindComponentByClass<UHealthComponent>();
 
-	if (PlayerPawn != Player)
+	if (!PlayerPawn->GetClass()->IsChildOf(ACharacter::StaticClass()))
 	{
 		return false;
 	}

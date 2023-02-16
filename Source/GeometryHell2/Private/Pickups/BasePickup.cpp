@@ -17,8 +17,6 @@ ABasePickup::ABasePickup()
 void ABasePickup::BeginPlay()
 {
 	Super::BeginPlay();
-	
-
 }
 
 bool ABasePickup::GivePickup(AActor* PlayerPawn)

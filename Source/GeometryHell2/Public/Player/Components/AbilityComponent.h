@@ -19,6 +19,8 @@ public:
 	void RestoreTime();
 	void Dash();
 
+	bool TryToAddAbilityStamina(float Amount);
+
 	UPROPERTY(BlueprintAssignable)
 	FOnAbilityStaminaChange OnAbilityStaminaChange;
 
@@ -83,4 +85,15 @@ private:
 	FTimerHandle StaminaRestoreTimer;
 
 	FTimerHandle DashTimer;
+
+	bool IsTimerActive(FTimerHandle& Timer);
+	void ClearTimer(FTimerHandle& Timer);
+	template< class UserClass >
+	void SetTimerInComponent(FTimerHandle& InOutHandle, UserClass* InObj, typename FTimerDelegate::TUObjectMethodDelegate< UserClass >::FMethodPtr InTimerMethod, float InRate, bool InbLoop = false, float InFirstDelay = -1.f);
 };
+
+template<class UserClass>
+FORCEINLINE void UAbilityComponent::SetTimerInComponent(FTimerHandle& InOutHandle, UserClass* InObj, typename FTimerDelegate::TUObjectMethodDelegate<UserClass>::FMethodPtr InTimerMethod, float InRate, bool InbLoop, float InFirstDelay)
+{
+	GetWorld()->GetTimerManager().SetTimer(InOutHandle, InObj, InTimerMethod, InRate, InbLoop, InFirstDelay);
+}

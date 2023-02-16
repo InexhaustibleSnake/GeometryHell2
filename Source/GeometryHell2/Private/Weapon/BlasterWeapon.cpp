@@ -23,7 +23,6 @@ void ABlasterWeapon::MakeShot()
 	if (Projectile)
 	{
 		CanFire = false;
-
 		Projectile->SetOwner(GetOwner());
 		Projectile->SetShotDirection(Direction);
 		Projectile->SetDamage(GetOwner()->CustomTimeDilation > 1.0f ? ProjectileDamage * 1.5 : ProjectileDamage);

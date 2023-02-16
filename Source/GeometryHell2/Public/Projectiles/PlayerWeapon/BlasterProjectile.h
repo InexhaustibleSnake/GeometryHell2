@@ -12,6 +12,7 @@ class GEOMETRYHELL2_API ABlasterProjectile : public ABaseProjectile
 {
 	GENERATED_BODY()
 
-public:
-	ABlasterProjectile();
+protected:
+	
+	void OnProjectileHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 };
