@@ -15,6 +15,7 @@ AMainPlayerController::AMainPlayerController()
 void AMainPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+	AudioComponent->SetSound(FightOst);
 }
 
 void AMainPlayerController::UpdateEnemiesInFight(int32 Amount)
