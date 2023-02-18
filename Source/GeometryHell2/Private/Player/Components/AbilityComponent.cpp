@@ -124,9 +124,11 @@ void UAbilityComponent::RestoreGravityAfterDash()
 {
 	const auto Player = Cast<ACharacter>(GetOwner());
 	if (!Player) return;
+
 	auto MovementComponent = Player->FindComponentByClass<UCharacterMovementComponent>();
-	MovementComponent->GravityScale = PlayerGravityScale;
 	MovementComponent->StopMovementImmediately();
+
+	MovementComponent->GravityScale = PlayerGravityScale;
 }
 
 bool UAbilityComponent::TryToAddAbilityStamina(float Amount)

@@ -76,6 +76,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Dash")
 		float DashStaminaUsage = 5.0f;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Dash")
+		float TimeToRestoreGravity = 0.4f;
+
 private:
 	float PlayerGravityScale = 1.0f;
 	void RestoreGravityAfterDash();
