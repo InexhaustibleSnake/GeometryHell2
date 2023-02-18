@@ -45,7 +45,8 @@ void UAbilityComponent::EnableSlowTime()
 
 void UAbilityComponent::EnableTimeStop()
 {
-	if (GetOwner()->GetVelocity().IsZero()) {
+	if (GetOwner()->GetVelocity().IsZero())
+	{
 		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), StopTimeStrength);
 
 		GetOwner()->CustomTimeDilation = PlayerSpeedInStopTime;
@@ -87,7 +88,10 @@ void UAbilityComponent::RestoreTime()
 
 void UAbilityComponent::RestoreAbilityStamina()
 {
-	if (AbilityStaminaIsFull()) { ClearTimer(StaminaRestoreTimer); }
+	if (AbilityStaminaIsFull()) 
+	{ 
+		ClearTimer(StaminaRestoreTimer); 
+	}
 
 	AbilityStamina = FMath::Clamp(AbilityStamina + AbilityStaminaRestore, 0.0f, MaxAbilityStamina);
 	OnAbilityStaminaChange.Broadcast();
@@ -95,11 +99,11 @@ void UAbilityComponent::RestoreAbilityStamina()
 
 void UAbilityComponent::Dash()
 {
+	if (AbilityStamina <= 5.0f) return;
+
 	const auto Player = Cast<ACharacter>(GetOwner());
 	if (!Player) return;
 	auto MovementComponent = Player->FindComponentByClass<UCharacterMovementComponent>();
-
-	if (AbilityStamina <= 5.0f) return;
 	
 	if (MovementComponent->IsFalling())
 	{

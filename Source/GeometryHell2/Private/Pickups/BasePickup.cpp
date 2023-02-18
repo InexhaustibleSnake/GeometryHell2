@@ -19,6 +19,13 @@ void ABasePickup::BeginPlay()
 	Super::BeginPlay();
 }
 
+void ABasePickup::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	AddActorLocalRotation(FRotator(0.0f, 1.0f, 0.0f));
+}
+
 bool ABasePickup::GivePickup(AActor* PlayerPawn)
 {
 	return false;
@@ -28,14 +35,28 @@ void ABasePickup::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	if (GivePickup(OtherActor))
 	{
-		Destroy();
+		ShouldRespawn ? PickupTaken() : Destroy();
 	}
 }
 
-void ABasePickup::Tick(float DeltaTime)
+void ABasePickup::PickupTaken()
 {
-	Super::Tick(DeltaTime);
+	if (GetRootComponent())
+	{
+		GetRootComponent()->SetVisibility(false, true);
+	}
 
-	AddActorLocalRotation(FRotator(0.0f, 1.0f, 0.0f));
+	SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	GetWorldTimerManager().SetTimer(RespawnTimer, this, &ABasePickup::RespawnPickup, RespawnTime);
 }
 
+void ABasePickup::RespawnPickup()
+{
+	if (GetRootComponent())
+	{
+		GetRootComponent()->SetVisibility(true, true);
+	}
+
+	SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+}

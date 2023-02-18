@@ -26,7 +26,18 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 		UStaticMeshComponent* StaticMesh;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Respawn")
+		bool ShouldRespawn = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Respawn")
+		float RespawnTime = 15.0f;
+
 	virtual bool GivePickup(AActor* PlayerPawn);
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
+private:
+	FTimerHandle RespawnTimer;
+
+	void PickupTaken();
+	void RespawnPickup();
 };

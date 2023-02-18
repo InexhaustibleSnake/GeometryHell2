@@ -18,6 +18,7 @@ void ASpawnEnemiesInWaves::SpawnEnemies()
 	for (const TPair<AActor*, TSubclassOf<ABaseEnemy>>& Pair : SpawnData)
 	{
 		FTransform SpawnTransForm = Pair.Key->GetTransform();
+		if (!Pair.Key) return;
 
 		ABaseEnemy* SpawnedEnemy = GetWorld()->SpawnActor<ABaseEnemy>(Pair.Value, SpawnTransForm);
 	}
