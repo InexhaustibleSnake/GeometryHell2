@@ -3,7 +3,6 @@
 #include "Weapon/BaseWeapon.h"
 #include "GameFramework/Pawn.h"
 #include "Camera/CameraShakeBase.h"
-#include "GameFramework/Pawn.h"
 #include "GameFramework/Controller.h"
 #include "Sound/SoundCue.h"
 #include "Kismet/GameplayStatics.h"
