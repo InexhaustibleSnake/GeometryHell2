@@ -9,6 +9,7 @@
 class USkeletalMeshComponent;
 class ABaseProjectile;
 class UCameraShakeBase;
+class USoundCue;
 
 UCLASS()
 class GEOMETRYHELL2_API ABaseWeapon : public AActor
@@ -41,7 +42,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 		float Accuracy = 3.0f;
 
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 		TSubclassOf<ABaseProjectile> ProjectileToSpawn;
 
@@ -50,6 +50,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		TSubclassOf<UCameraShakeBase> CameraShake;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
+		USoundCue* ShootAudio;
 
 	FTimerHandle FireTimer;
 	FTimerHandle DelayTimer;

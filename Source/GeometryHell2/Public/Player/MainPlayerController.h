@@ -29,11 +29,23 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FPlayerInFight PlayerInFight;
 
+	void SetFightOst(USoundCue* NewFightOst, bool PlaySound);
+	void SetAmbient(USoundCue* NewAmbient, bool PlaySound);
+
 protected:
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Style")
+		UStyleComponent* StyleComponent;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
-		UAudioComponent* AudioComponent;
+		UAudioComponent* FightAudioComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
+		UAudioComponent* AmbientAudioComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
+		USoundCue* Ambient;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
 		USoundCue* FightOst;
@@ -43,9 +55,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FightState")
 		float TimeToChangeFightState = 15.0f;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
-		UStyleComponent* StyleComponent;
 
 private:
 	void ChangePlayingOst();

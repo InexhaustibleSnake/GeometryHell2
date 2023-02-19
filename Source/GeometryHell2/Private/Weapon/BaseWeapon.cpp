@@ -5,6 +5,8 @@
 #include "Camera/CameraShakeBase.h"
 #include "GameFramework/Pawn.h"
 #include "GameFramework/Controller.h"
+#include "Sound/SoundCue.h"
+#include "Kismet/GameplayStatics.h"
 
 ABaseWeapon::ABaseWeapon()
 {
@@ -33,7 +35,7 @@ void ABaseWeapon::StopFire()
 
 void ABaseWeapon::MakeShot()
 {
-
+	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), ShootAudio, GetOwner()->GetActorLocation());
 }
 
 void ABaseWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd)

@@ -33,4 +33,5 @@ void ABlasterWeapon::MakeShot()
 		GetWorldTimerManager().SetTimer(DelayTimer, this, &ABaseWeapon::ControlFireDelay, FireRate, false);
 	}
 
+	Super::MakeShot();
 }

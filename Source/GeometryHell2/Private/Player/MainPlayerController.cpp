@@ -5,17 +5,21 @@
 #include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
+#include "Sound/SoundWave.h"
 
 AMainPlayerController::AMainPlayerController()
 {
-	AudioComponent = CreateDefaultSubobject<UAudioComponent>("AudioComponent");
+	FightAudioComponent = CreateDefaultSubobject<UAudioComponent>("FightAudioComponent");
+	AmbientAudioComponent = CreateDefaultSubobject<UAudioComponent>("AmbientAudioComponent");
 	StyleComponent = CreateDefaultSubobject<UStyleComponent>("StyleComponent");
 }
 
 void AMainPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	AudioComponent->SetSound(FightOst);
+	//FightAudioComponent->SetSound(FightOst);
+	//AmbientAudioComponent->SetSound(Ambient);
+	AmbientAudioComponent->Play(0.0f);
 }
 
 void AMainPlayerController::UpdateEnemiesInFight(int32 Amount)
@@ -45,17 +49,18 @@ void AMainPlayerController::UpdateEnemiesInFight(int32 Amount)
 
 void AMainPlayerController::ChangePlayingOst()
 {
-	if (EnemiesInFight == 1 && !AudioComponent->IsPlaying())
+	if (EnemiesInFight == 1 && !FightAudioComponent->IsPlaying())
 	{
-		AudioComponent->Play(0.0f);
+		AmbientAudioComponent->Stop();
+		FightAudioComponent->Play(0.0f);
 	}
 	else if (EnemiesInFight == 0)
 	{
 		GetWorldTimerManager().SetTimer(FadeOutTimer, this, &AMainPlayerController::FadeMusicOut, 4.0f, false, 4.0f);
 	}
-	else if (AudioComponent->bIsFadingOut)
+	else if (FightAudioComponent->bIsFadingOut)
 	{
-		AudioComponent->FadeIn(2.0f, 0.3f);
+		FightAudioComponent->FadeIn(2.0f, 0.3f);
 	}
 }
 
@@ -63,7 +68,7 @@ void AMainPlayerController::FadeMusicOut()
 {
 	if (EnemiesInFight == 0)
 	{
-		AudioComponent->FadeOut(4.0f, 0.05f, EAudioFaderCurve::Linear);
+		FightAudioComponent->FadeOut(4.0f, 0.05f, EAudioFaderCurve::Linear);
 	}
 }
 
@@ -77,5 +82,30 @@ void AMainPlayerController::OnFightEnd()
 	if (EnemiesInFight > 0) return;
 	IsPlayerInFight = false;
 	PlayerInFight.Broadcast(false);
+
 	StyleComponent->ClearStylePoints();
+
+	AmbientAudioComponent->FadeIn(4.0f);
+}
+
+void AMainPlayerController::SetFightOst(USoundCue* NewFightOst, bool PlaySound)
+{
+	if (!NewFightOst) return;
+
+	FightAudioComponent->SetSound(NewFightOst);
+	if (PlaySound)
+	{
+		FightAudioComponent->Play();
+	}
+}
+
+void AMainPlayerController::SetAmbient(USoundCue* NewAmbient, bool PlaySound)
+{
+	if (!NewAmbient) return;
+
+	AmbientAudioComponent->SetSound(NewAmbient);
+	if (PlaySound)
+	{
+		AmbientAudioComponent->Play();
+	}
 }
