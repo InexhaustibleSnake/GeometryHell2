@@ -38,11 +38,12 @@ void ABaseEnemy::BeginPlay()
 
 void ABaseEnemy::OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
+	if (InstigatedBy->GetClass()->IsChildOf(ABaseAIController::StaticClass())) return;
+
 	Health = FMath::Clamp(Health - Damage, 0.0f, MaxHealth);
 
 	if (Health <= 0)
 	{
-		Destroyed();
 		const auto Player = Cast<APawn>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 		auto PlayerController = Cast<APlayerController>(Player->GetController());
 
@@ -82,6 +83,8 @@ void ABaseEnemy::ShootStart()
 
 void ABaseEnemy::ShootProjectile()
 {
+	if (!MainProjectile) return;
+
 	const FTransform SpawnTransform(FRotator::ZeroRotator, CannonMesh->GetComponentLocation());
 
 	ABaseProjectile* Projectile = GetWorld()->SpawnActorDeferred<ABaseProjectile>(MainProjectile, SpawnTransform);

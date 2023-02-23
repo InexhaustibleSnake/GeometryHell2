@@ -17,8 +17,8 @@ AMainPlayerController::AMainPlayerController()
 void AMainPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	//FightAudioComponent->SetSound(FightOst);
-	//AmbientAudioComponent->SetSound(Ambient);
+	FightAudioComponent->SetSound(FightOst);
+	AmbientAudioComponent->SetSound(Ambient);
 	AmbientAudioComponent->Play(0.0f);
 }
 
@@ -56,7 +56,7 @@ void AMainPlayerController::ChangePlayingOst()
 	}
 	else if (EnemiesInFight == 0)
 	{
-		GetWorldTimerManager().SetTimer(FadeOutTimer, this, &AMainPlayerController::FadeMusicOut, 4.0f, false, 4.0f);
+		GetWorldTimerManager().SetTimer(FadeOutTimer, this, &AMainPlayerController::FadeMusicOut, 0.1f, false, TimeToChangeFightState);
 	}
 	else if (FightAudioComponent->bIsFadingOut)
 	{
@@ -68,7 +68,7 @@ void AMainPlayerController::FadeMusicOut()
 {
 	if (EnemiesInFight == 0)
 	{
-		FightAudioComponent->FadeOut(4.0f, 0.05f, EAudioFaderCurve::Linear);
+		FightAudioComponent->FadeOut(5.0f, 0.05f, EAudioFaderCurve::Linear);
 	}
 }
 
@@ -79,13 +79,15 @@ void AMainPlayerController::OnPlayerDeath()
 
 void AMainPlayerController::OnFightEnd()
 {
-	if (EnemiesInFight > 0) return;
-	IsPlayerInFight = false;
-	PlayerInFight.Broadcast(false);
+	if (EnemiesInFight == 0)
+	{
+		IsPlayerInFight = false;
+		PlayerInFight.Broadcast(false);
 
-	StyleComponent->ClearStylePoints();
+		StyleComponent->ClearStylePoints();
 
-	AmbientAudioComponent->FadeIn(4.0f);
+		AmbientAudioComponent->FadeIn(4.0f);
+	}
 }
 
 void AMainPlayerController::SetFightOst(USoundCue* NewFightOst, bool PlaySound)

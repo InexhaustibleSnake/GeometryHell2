@@ -54,7 +54,7 @@ protected:
 		USoundCue* GameOverOst;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FightState")
-		float TimeToChangeFightState = 15.0f;
+		float TimeToChangeFightState = 20.0f;
 
 private:
 	void ChangePlayingOst();

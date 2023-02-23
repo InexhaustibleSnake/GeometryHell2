@@ -48,8 +48,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health")
 		float MaxHealth = 100;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health")
 		float Health;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health")
