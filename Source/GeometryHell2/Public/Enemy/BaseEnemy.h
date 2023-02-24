@@ -13,6 +13,7 @@ class UNiagaraSystem;
 class UBehaviorTree;
 class ABaseProjectile;
 
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChanged, float, NewHealth);
 DECLARE_MULTICAST_DELEGATE(FOnDeath);
 
 UCLASS()
@@ -28,6 +29,7 @@ public:
 		UBehaviorTree* BehaviorTreeAsset;
 
 	FOnDeath OnDeath;
+	//FOnHealthChanged OnHealthChanged;
 
 protected:
 	virtual void BeginPlay() override;
@@ -48,6 +50,8 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health")
 		float MaxHealth = 100;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health")
 		float Health;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health")
