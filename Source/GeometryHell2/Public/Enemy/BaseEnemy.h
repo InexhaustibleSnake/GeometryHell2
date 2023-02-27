@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Extra/ExtraTypes.h"
 #include "BaseEnemy.generated.h"
 
 class UTextRenderComponent;
@@ -12,9 +13,6 @@ class USoundCue;
 class UNiagaraSystem;
 class UBehaviorTree;
 class ABaseProjectile;
-
-//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChanged, float, NewHealth);
-DECLARE_MULTICAST_DELEGATE(FOnDeath);
 
 UCLASS()
 class GEOMETRYHELL2_API ABaseEnemy : public ACharacter
@@ -28,8 +26,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
 		UBehaviorTree* BehaviorTreeAsset;
 
+	UPROPERTY(BlueprintAssignable)
 	FOnDeath OnDeath;
-	//FOnHealthChanged OnHealthChanged;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnHealthChanged OnHealthChanged;
 
 protected:
 	virtual void BeginPlay() override;
@@ -82,4 +83,9 @@ protected:
 		UNiagaraSystem* OnDestroyedParticles;
 
 	FTimerHandle ShootTimer;
+
+private:
+	
+	void AddCoresAndStylePoints();
+
 };

@@ -12,7 +12,7 @@ bool UHealthComponent::TryToAddHealth(float Amount)
 	if (IsHealthFull()) return false;
 
 	Health = FMath::Clamp(Health + Amount, 0.0f, MaxHealth);
-	OnHealthChanged.Broadcast();
+	OnHealthChanged.Broadcast(Health);
 	return true;
 }
 
@@ -33,12 +33,12 @@ void UHealthComponent::SetHealth(float Amount)
 {
 	Health = FMath::Clamp(Health - Amount, 0.0f, MaxHealth);
 
-	if (Health == 0)
+	if (FMath::IsNearlyZero(Health))
 	{
 		OnDeath.Broadcast();
 	}
 	else
 	{
-		OnHealthChanged.Broadcast();
+		OnHealthChanged.Broadcast(Health);
 	}
 }

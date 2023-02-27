@@ -42,16 +42,10 @@ void ABaseEnemy::OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageT
 
 	Health = FMath::Clamp(Health - Damage, 0.0f, MaxHealth);
 
-	if (Health <= 0)
+	OnHealthChanged.Broadcast(Health);
+
+	if (FMath::IsNearlyZero(Health))
 	{
-		const auto Player = Cast<APawn>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-		auto PlayerController = Cast<APlayerController>(Player->GetController());
-
-		auto StyleComponent = PlayerController->FindComponentByClass<UStyleComponent>();
-		StyleComponent->AddStylePoints(StylePointForKill);
-		StyleComponent->AddCores(CoresForKill);
-
-		OnDeath.Broadcast();
 		Destroyed();
 		return;
 	}
@@ -72,6 +66,10 @@ void ABaseEnemy::Destroyed()
 {
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), OnDestroyedParticles, CannonMesh->GetComponentLocation(), GetActorRotation());
 	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), DeathSound, GetActorLocation());
+
+	OnDeath.Broadcast();
+
+	AddCoresAndStylePoints();
 
 	Destroy();
 }
@@ -96,4 +94,19 @@ void ABaseEnemy::ShootProjectile()
 		Projectile->SetOwner(this);
 		Projectile->FinishSpawning(SpawnTransform);
 	}
+}
+
+void ABaseEnemy::AddCoresAndStylePoints()
+{
+	const auto Player = Cast<APawn>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if (!Player) return;
+
+	auto PlayerController = Cast<APlayerController>(Player->GetController());
+	if (!PlayerController) return;
+
+	auto StyleComponent = PlayerController->FindComponentByClass<UStyleComponent>();
+	if (!StyleComponent) return;
+
+	StyleComponent->AddStylePoints(StylePointForKill);
+	StyleComponent->AddCores(CoresForKill);
 }

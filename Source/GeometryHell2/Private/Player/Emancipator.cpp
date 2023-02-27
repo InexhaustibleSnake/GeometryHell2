@@ -82,10 +82,12 @@ void AEmancipator::Interact()
 	FCollisionQueryParams TraceParams;
 	TraceParams.AddIgnoredActor(this);
 	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility, TraceParams);
-	if (HitResult.bBlockingHit)
+	if (HitResult.bBlockingHit && HitResult.Actor.IsValid())
 	{
-		auto InteractComponent = Cast<UInteractComponent>(HitResult.Actor->GetComponentByClass(UInteractComponent::StaticClass()));
-		if (!InteractComponent) return;
-		InteractComponent->OnInteract.Broadcast();
+		auto InteractComponent = Cast<UInteractComponent>(HitResult.Actor->FindComponentByClass(UInteractComponent::StaticClass()));
+		if (InteractComponent)
+		{
+			InteractComponent->OnInteract.Broadcast();
+		}
 	}
 }

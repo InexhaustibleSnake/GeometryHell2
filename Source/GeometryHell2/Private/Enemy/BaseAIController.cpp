@@ -20,7 +20,7 @@ void ABaseAIController::OnPossess(APawn* InPawn)
     if (Enemy)
     {
         RunBehaviorTree(Enemy->BehaviorTreeAsset);
-        Enemy->OnDeath.AddUObject(this, &ABaseAIController::OnDestroy);
+        Enemy->OnDeath.AddDynamic(this, &ABaseAIController::OnDestroy);
     }
 }
 
