@@ -14,5 +14,6 @@ bool ACoresPickup::GivePickup(AActor* PlayerPawn)
 
 	auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
 	GameInstance->AddCores(CoresAmount);
+	OnPickupTaked.Broadcast();
 	return true;
 }

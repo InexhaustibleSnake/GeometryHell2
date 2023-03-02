@@ -15,3 +15,7 @@ class GEOMETRYHELL2_API UExtraTypes : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 
 };
+
+
+
+//It was originally planned to make an empty h file, but for some reason Visual Studio throws an error

@@ -30,6 +30,10 @@ AEmancipator::AEmancipator()
 void AEmancipator::BeginPlay()
 {
 	Super::BeginPlay();
+	check(WeaponComponent);
+	check(HealthComponent);
+	check(AbilityComponent);
+	check(StaminaComponent);
 	
 }
 
