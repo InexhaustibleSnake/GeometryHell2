@@ -12,7 +12,11 @@ class GEOMETRYHELL2_API UMainGameInstance : public UGameInstance
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintCallable)
 	void AddCores(float Amount);
+	UFUNCTION(BlueprintCallable)
+	void DecreaseCoreAmount(float Amount);
+	UFUNCTION(BlueprintCallable)
 	float GetCores() const { return NumOfCores; }
 
 protected:
