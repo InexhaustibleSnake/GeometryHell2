@@ -79,6 +79,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Dash")
 		float TimeToRestoreGravity = 0.4f;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+		USoundWave* TimeStopSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+		USoundWave* TimeResumeSound;
+
 private:
 	float PlayerGravityScale = 1.0f;
 	void RestoreGravityAfterDash();

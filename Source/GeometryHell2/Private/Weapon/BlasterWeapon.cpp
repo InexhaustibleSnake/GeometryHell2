@@ -31,7 +31,8 @@ void ABlasterWeapon::MakeShot()
 		PlayCameraShake();
 
 		GetWorldTimerManager().SetTimer(DelayTimer, this, &ABaseWeapon::ControlFireDelay, FireRate, false);
+		
 	}
-
 	Super::MakeShot();
 }
+

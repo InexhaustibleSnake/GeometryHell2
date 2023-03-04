@@ -9,6 +9,7 @@
 #include "GameFramework/MovementComponent.h"
 #include "UObject/Object.h"
 #include "Engine/EngineTypes.h"
+#include "Sound/SoundWave.h"
 
 UAbilityComponent::UAbilityComponent()
 {
@@ -51,6 +52,8 @@ void UAbilityComponent::EnableTimeStop()
 
 		GetOwner()->CustomTimeDilation = PlayerSpeedInStopTime;
 
+		UGameplayStatics::PlaySound2D(GetWorld(), TimeStopSound);
+
 		TimeStopActive = true;
 
 		SetTimerInComponent(TimeManagerTimer, this, &UAbilityComponent::DecreaseAbilityStamina, AbilityStaminaReduceStopTimeRate, true, 0.0f);
@@ -80,6 +83,9 @@ void UAbilityComponent::RestoreTime()
 	if (TimeStopActive)
 	{
 		GetOwner()->CustomTimeDilation = 1.0f;
+
+		UGameplayStatics::PlaySound2D(GetWorld(), TimeResumeSound);
+
 		TimeStopActive = false;
 	}
 
@@ -99,7 +105,7 @@ void UAbilityComponent::RestoreAbilityStamina()
 
 void UAbilityComponent::Dash()
 {
-	if (AbilityStamina <= 5.0f) return;
+	if (AbilityStamina <= DashStaminaUsage) return;
 
 	const auto Player = Cast<ACharacter>(GetOwner());
 	if (!Player) return;
