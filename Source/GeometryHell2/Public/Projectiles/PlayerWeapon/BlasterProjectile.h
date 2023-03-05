@@ -20,4 +20,6 @@ protected:
 
 private:
 	void AddStylePoints();
+
+	AController* GetController() const;
 };

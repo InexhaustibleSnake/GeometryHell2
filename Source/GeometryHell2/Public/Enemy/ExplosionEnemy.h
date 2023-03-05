@@ -19,6 +19,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
+	void Explode();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 		UTextRenderComponent* ExplosionTextTimer;
@@ -41,7 +42,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Explosion")
 		USoundCue* ExplosionSound;
 
-	void Explode();
-
+private:
 	FTimerHandle ExplosionTimer;
+
 };

@@ -6,8 +6,6 @@
 #include "Components/TextRenderComponent.h"
 #include "Components/SphereComponent.h"
 #include "Sound/SoundCue.h"
-#include "Player/Emancipator.h"
-#include "DrawDebugHelpers.h"
 
 AExplosionEnemy::AExplosionEnemy()
 {

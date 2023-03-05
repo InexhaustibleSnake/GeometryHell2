@@ -24,7 +24,7 @@ public:
 	void ShootStart();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
-		UBehaviorTree* BehaviorTreeAsset;
+	UBehaviorTree* BehaviorTreeAsset;
 
 	UPROPERTY(BlueprintAssignable)
 	FOnDeath OnDeath;
@@ -34,8 +34,10 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+
 	UFUNCTION()
 	virtual void OnTakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+
 	virtual void OnDestroy();
 
 	void ShootProjectile();

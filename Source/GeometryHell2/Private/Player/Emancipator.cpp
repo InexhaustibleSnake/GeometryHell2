@@ -80,12 +80,17 @@ void AEmancipator::Interact()
 {
 	FVector TraceStart, TraceEnd;
 	FRotator TraceRotation;
+
 	GetController()->GetPlayerViewPoint(TraceStart, TraceRotation);
 	TraceEnd = TraceStart + TraceRotation.Vector() * 400.0f;
+
 	FHitResult HitResult;
+
 	FCollisionQueryParams TraceParams;
 	TraceParams.AddIgnoredActor(this);
+
 	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility, TraceParams);
+
 	if (HitResult.bBlockingHit && HitResult.Actor.IsValid())
 	{
 		auto InteractComponent = Cast<UInteractComponent>(HitResult.Actor->FindComponentByClass(UInteractComponent::StaticClass()));

@@ -30,4 +30,5 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	TMap<AActor*, TSubclassOf<ABaseEnemy>> SpawnData;
+
 };

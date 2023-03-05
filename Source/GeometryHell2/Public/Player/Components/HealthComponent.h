@@ -37,5 +37,10 @@ protected:
 	UFUNCTION()
 		void OnTakeAnyDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+		TSubclassOf<UCameraShakeBase> CameraShake;
+
+	void PlayCameraShake();
+
 	void SetHealth(float Amount);
 };

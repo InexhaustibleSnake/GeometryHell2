@@ -16,12 +16,7 @@ class GEOMETRYHELL2_API UInteractComponent : public UActorComponent
 public:	
 	UInteractComponent();
 
-	UFUNCTION(BlueprintCallable)
-		virtual void OnPlayerInteract();
-
 	UPROPERTY(BlueprintAssignable)
 		FOnInteract OnInteract;
 
-protected:
-	virtual void BeginPlay() override;
 };

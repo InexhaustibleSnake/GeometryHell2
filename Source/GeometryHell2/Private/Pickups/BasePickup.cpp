@@ -2,6 +2,7 @@
 
 #include "Pickups/BasePickup.h"
 #include "Components/SphereComponent.h"
+#include "Player/Emancipator.h"
 
 ABasePickup::ABasePickup()
 {
@@ -33,6 +34,8 @@ bool ABasePickup::GivePickup(AActor* PlayerPawn)
 
 void ABasePickup::NotifyActorBeginOverlap(AActor* OtherActor)
 {
+	if (!OtherActor->GetClass()->IsChildOf(AEmancipator::StaticClass())) return;
+
 	if (GivePickup(OtherActor))
 	{
 		ShouldRespawn ? PickupTaken() : Destroy();

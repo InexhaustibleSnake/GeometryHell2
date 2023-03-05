@@ -16,4 +16,5 @@ protected:
 		float HealAmount = 25.0f;
 
 	virtual bool GivePickup(AActor* PlayerPawn) override;
+
 };

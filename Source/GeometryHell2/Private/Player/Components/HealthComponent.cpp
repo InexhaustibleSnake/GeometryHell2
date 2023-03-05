@@ -1,6 +1,7 @@
 // Geometry Hell 2. Made By Alexey Guchmazov
 
 #include "Player/Components/HealthComponent.h"
+#include "Camera/CameraShakeBase.h"
 
 UHealthComponent::UHealthComponent()
 {
@@ -40,5 +41,17 @@ void UHealthComponent::SetHealth(float Amount)
 	else
 	{
 		OnHealthChanged.Broadcast(Health);
+		PlayCameraShake();
 	}
+}
+
+void UHealthComponent::PlayCameraShake()
+{
+	const auto Player = Cast<APawn>(GetOwner());
+	if (!Player) return;
+
+	const auto Controller = Cast<APlayerController>(Player->GetController());
+	if (!Controller || !Controller->PlayerCameraManager) return;
+
+	Controller->PlayerCameraManager->StartCameraShake(CameraShake);
 }

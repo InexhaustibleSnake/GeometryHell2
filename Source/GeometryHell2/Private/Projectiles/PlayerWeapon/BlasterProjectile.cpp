@@ -4,7 +4,6 @@
 #include "Player/Emancipator.h"
 #include "Player/Components/StyleComponent.h"
 
-
 void ABlasterProjectile::OnProjectileHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	if (!OtherActor)
@@ -15,8 +14,9 @@ void ABlasterProjectile::OnProjectileHit(UPrimitiveComponent* HitComponent, AAct
 	
 	const auto Player = Cast<APawn>(GetOwner());
 
-	if (OtherActor->GetClass()->IsChildOf(AEmancipator::StaticClass())) return;
-	OtherActor->TakeDamage(BaseDamage, FDamageEvent{}, Player->GetController(), this);
+	if (OtherActor == Player) return;
+
+	OtherActor->TakeDamage(BaseDamage, FDamageEvent{}, GetController(), this);
 
 	AddStylePoints();
 
@@ -30,4 +30,10 @@ void ABlasterProjectile::AddStylePoints()
 
 	auto StyleComponent = PlayerController->FindComponentByClass<UStyleComponent>();
 	StyleComponent->AddStylePoints(StylePointsForHit);
+}
+
+AController* ABlasterProjectile::GetController() const
+{
+	const auto Pawn = Cast<APawn>(GetOwner());
+	return Pawn ? Pawn->GetController() : nullptr;
 }

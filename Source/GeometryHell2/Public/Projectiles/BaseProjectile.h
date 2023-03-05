@@ -17,9 +17,10 @@ class GEOMETRYHELL2_API ABaseProjectile : public AActor
 public:	
 	ABaseProjectile();
 
-
 	void SetShotDirection(const FVector& Direction) { ShotDirection = Direction; }
+
 	void SetDamage(float Damage) { BaseDamage = Damage; }
+
 	float GetDamage() const { return BaseDamage; }
    
 protected:
@@ -37,7 +38,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Properities")
 		float BaseDamage = 10.0f;
 
-	FName TagToIgnore;
+private:
 	FVector ShotDirection;
 
 	UFUNCTION()

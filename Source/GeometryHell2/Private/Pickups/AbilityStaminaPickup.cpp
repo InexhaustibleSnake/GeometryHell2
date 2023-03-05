@@ -2,19 +2,18 @@
 
 #include "Pickups/AbilityStaminaPickup.h"
 #include "GameFramework/Character.h"
-#include "Player/Emancipator.h"
 #include "Player/Components/AbilityComponent.h"
 
 bool AAbilityStaminaPickup::GivePickup(AActor* PlayerPawn)
 {
-	const auto PlayerCharacter = Cast<AEmancipator>(PlayerPawn);
+	const auto PlayerCharacter = Cast<APawn>(PlayerPawn);
 
-	if (!PlayerPawn->GetClass()->IsChildOf(AEmancipator::StaticClass()))
+	auto AbilityComponent = PlayerCharacter->FindComponentByClass<UAbilityComponent>();
+
+	if (!AbilityComponent)
 	{
 		return false;
 	}
 
-	auto AbilityComponent = PlayerCharacter->FindComponentByClass<UAbilityComponent>();
-
-	return AbilityComponent->TryToAddAbilityStamina(AbilityStaminaRestore) ? true : false;
+	return AbilityComponent->TryToAddAbilityStamina(AbilityStaminaRestore);
 }

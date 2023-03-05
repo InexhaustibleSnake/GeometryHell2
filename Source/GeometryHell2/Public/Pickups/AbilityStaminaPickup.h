@@ -16,4 +16,5 @@ protected:
 		float AbilityStaminaRestore = 5.0f;
 
 	virtual bool GivePickup(AActor* PlayerPawn) override;
+
 };

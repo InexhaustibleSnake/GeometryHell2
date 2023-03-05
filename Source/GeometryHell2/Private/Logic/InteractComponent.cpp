@@ -6,12 +6,3 @@ UInteractComponent::UInteractComponent()
 {
     PrimaryComponentTick.bCanEverTick = false;
 }
-
-void UInteractComponent::OnPlayerInteract()
-{
-}
-
-void UInteractComponent::BeginPlay()
-{
-	Super::BeginPlay();
-}
