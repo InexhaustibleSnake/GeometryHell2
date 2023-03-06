@@ -20,6 +20,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Waves")
 	int32 WavesAmount = 2;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Waves")
+		TMap<AActor*, TSubclassOf<ABaseEnemy>> SpawnData;
+
 private:
 	int32 CurrentWave = 0;
 

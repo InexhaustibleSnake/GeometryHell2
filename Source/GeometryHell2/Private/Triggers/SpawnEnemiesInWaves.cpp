@@ -2,7 +2,6 @@
 
 #include "Triggers/SpawnEnemiesInWaves.h"
 #include "Player/MainPlayerController.h"
-#include "Kismet/GameplayStatics.h"
 #include "Player/Emancipator.h"
 #include "Enemy/BaseEnemy.h"
 
@@ -28,8 +27,8 @@ void ASpawnEnemiesInWaves::SpawnEnemies()
 {
 	for (const TPair<AActor*, TSubclassOf<ABaseEnemy>>& Pair : SpawnData)
 	{
+		if (!Pair.Key && !Pair.Value) return;
 		FTransform SpawnTransForm = Pair.Key->GetTransform();
-		if (!Pair.Key) return;
 
 		ABaseEnemy* SpawnedEnemy = GetWorld()->SpawnActor<ABaseEnemy>(Pair.Value, SpawnTransForm);
 	}

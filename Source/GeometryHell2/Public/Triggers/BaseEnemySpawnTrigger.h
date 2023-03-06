@@ -29,7 +29,5 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	UBoxComponent* BoxTrigger;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
-	TMap<AActor*, TSubclassOf<ABaseEnemy>> SpawnData;
 
 };
