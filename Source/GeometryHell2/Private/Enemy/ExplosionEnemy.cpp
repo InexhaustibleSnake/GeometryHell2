@@ -36,5 +36,5 @@ void AExplosionEnemy::Explode()
 
 	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), ExplosionSound, GetActorLocation());
 
-	Destroy();
+	OnDestroy();
 }
