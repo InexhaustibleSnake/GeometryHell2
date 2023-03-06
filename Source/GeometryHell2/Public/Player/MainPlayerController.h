@@ -7,10 +7,12 @@
 #include "MainPlayerController.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerInFight, bool, InFight);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAllEnemiesKilled);
 
 class UAudioComponent;
 class USoundCue;
 class UStyleComponent;
+class UMasterAudioComponent;
 
 UCLASS()
 class GEOMETRYHELL2_API AMainPlayerController : public APlayerController
@@ -27,10 +29,12 @@ public:
 	int32 GetEnemiesInFight() const { return EnemiesInFight; }
 
 	UPROPERTY(BlueprintAssignable)
-	FPlayerInFight PlayerInFight;
+	FPlayerInFight PlayerInFightStateChange;
 
-	void SetFightOst(USoundCue* NewFightOst, bool PlaySound);
-	void SetAmbient(USoundCue* NewAmbient, bool PlaySound);
+	UPROPERTY(BlueprintAssignable)
+	FOnAllEnemiesKilled OnAllEnemiesKilled;
+
+	float const GetTimeToChangeFightState() { return TimeToChangeFightState; }
 
 protected:
 	virtual void BeginPlay() override;
@@ -38,33 +42,17 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Style")
 		UStyleComponent* StyleComponent;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
-		UAudioComponent* FightAudioComponent;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
-		UAudioComponent* AmbientAudioComponent;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
-		USoundCue* Ambient;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
-		USoundCue* FightOst;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
-		USoundCue* GameOverOst;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+		UMasterAudioComponent* MasterAudioComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FightState")
-		float TimeToChangeFightState = 20.0f;
+		float TimeToChangeFightState = 10.0f;
 
 private:
-	void ChangePlayingOst();
-	void FadeMusicOut();
-	void OnPlayerDeath();
 	void OnFightEnd();
 
 	int32 EnemiesInFight = 0;
 	bool IsPlayerInFight = false;
 
-	FTimerHandle FadeOutTimer;
 	FTimerHandle FightStateTimer;
 };

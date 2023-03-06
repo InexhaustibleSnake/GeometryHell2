@@ -2,7 +2,6 @@
 
 #include "Pickups/CoresPickup.h"
 #include "Logic/MainGameInstance.h"
-#include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
 
 bool ACoresPickup::GivePickup(AActor* PlayerPawn)

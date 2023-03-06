@@ -4,6 +4,7 @@
 #include "Components/BoxComponent.h"
 #include "Player/MainPlayerController.h"
 #include "GameFramework/Pawn.h"
+#include "Player/Components/MasterAudioComponent.h"
 
 AChangeOst::AChangeOst()
 {
@@ -20,20 +21,23 @@ void AChangeOst::BeginPlay()
 
 void AChangeOst::OnPlayerOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	auto PlayerPawn = Cast<APawn>(OtherActor);
+	const auto PlayerPawn = Cast<APawn>(OtherActor);
 	if (!PlayerPawn) return;
 
-	auto PlayerController = Cast<AMainPlayerController>(PlayerPawn->GetController());
+	const auto PlayerController = Cast<AMainPlayerController>(PlayerPawn->GetController());
 	if (!PlayerController) return;
+
+	auto MasterAudioComponent = PlayerController->FindComponentByClass<UMasterAudioComponent>();
+	if (!MasterAudioComponent) return;
 
 	if (OverrideAmbient)
 	{
-		PlayerController->SetAmbient(Ambient, PlayNewAmbient);
+		MasterAudioComponent->SetAmbient(Ambient, PlayNewAmbient);
 	}
 
 	if (OverrideBattleOst)
 	{
-		PlayerController->SetFightOst(FightOst, PlayNewFightOst);
+		MasterAudioComponent->SetFightOst(FightOst, PlayNewFightOst);
 	}
 
 	Destroy();

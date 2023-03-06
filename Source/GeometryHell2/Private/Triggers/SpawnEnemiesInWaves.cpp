@@ -10,7 +10,18 @@ void ASpawnEnemiesInWaves::BeginOverlap(UPrimitiveComponent* OverlappedComponent
 {
 	if (!OtherActor->GetClass()->IsChildOf(AEmancipator::StaticClass())) return;
 
-	GetWorldTimerManager().SetTimer(CheckNumOfEnemiesTimer, this, &ASpawnEnemiesInWaves::CheckNumOfEnemies, CheckRate, true, 0.0f);
+	if (!WasAlreadyOverlaped)
+	{
+		const auto Player = Cast<APawn>(OtherActor);
+		if (!Player) return;
+
+		const auto Controller = Cast<AMainPlayerController>(Player->GetController());
+		Controller->OnAllEnemiesKilled.AddDynamic(this, &ASpawnEnemiesInWaves::SpawnEnemies);
+		
+		SpawnEnemies();
+
+		WasAlreadyOverlaped = true;
+	}
 }
 
 void ASpawnEnemiesInWaves::SpawnEnemies()
@@ -24,14 +35,4 @@ void ASpawnEnemiesInWaves::SpawnEnemies()
 	}
 
 	if (++CurrentWave == WavesAmount) Destroy();
-}
-
-void ASpawnEnemiesInWaves::CheckNumOfEnemies()
-{
-	const auto PlayerController = Cast<AMainPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-
-	if (PlayerController->GetEnemiesInFight() == 0)
-	{
-		SpawnEnemies();
-	}
 }
